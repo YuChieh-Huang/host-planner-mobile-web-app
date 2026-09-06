@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f4ef">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>Table — Birthday Dinner</title>
+<style>
+:root{
+  --bg:#f7f4ef; --surface:#fffdf9; --surface2:#f1ece4; --ink:#24231f;
+  --muted:#7a766d; --line:#e5dfd5; --accent:#7d5f4b; --accent2:#efe3d7;
+  --green:#58705d; --shadow:0 10px 30px rgba(50,42,33,.07); --radius:22px;
+  --font-body:-apple-system,BlinkMacSystemFont,"Avenir Next","Helvetica Neue","Segoe UI",sans-serif;
+  --font-display:"Iowan Old Style","Baskerville","Times New Roman",serif;
+  --text-xs:11px; --text-sm:12px; --text-md:14px; --text-lg:16px; --text-xl:23px; --text-hero:30px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)}
+body{min-height:100vh}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:760px;margin:0 auto;min-height:100vh;padding-bottom:94px}
+header{position:static;padding:28px 20px 12px;background:linear-gradient(var(--bg) 78%,rgba(247,244,239,0))}
+header.nonsticky{position:static}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:var(--text-xs);color:var(--muted);font-weight:700}
+h1{font-family:var(--font-display);font-size:var(--text-hero);line-height:1.05;margin:6px 0 4px;letter-spacing:-.02em;font-weight:700}
+h2{font-family:var(--font-display);font-size:var(--text-xl);letter-spacing:-.015em;margin:0;font-weight:700}
+h3{font-size:var(--text-lg);margin:0 0 8px;font-weight:700}
+p{line-height:1.5}
+.screen{padding:8px 20px 28px}
+.hidden{display:none!important}
+.card{background:var(--surface);border:1px solid rgba(229,223,213,.85);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:22px;margin-top:8px;background:linear-gradient(145deg,#fffdf9,#f1e9df)}
+.hero .date{font-size:14px;color:var(--muted);margin-top:8px}
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end}
+.count{font-size:13px;color:var(--muted);margin-top:16px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.75);font-size:12px;font-weight:650;color:#63594f}
+.mini-progress{margin-top:18px}
+.progress-track{height:7px;border-radius:99px;background:#e7dfd5;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .25s}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px}
+.section{margin-top:22px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:0 2px 10px}
+.link{border:0;background:none;color:var(--accent);font-weight:700;font-size:13px}
+.menu-card{padding:4px 0}
+.menu-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line)}
+.menu-row:last-child{border-bottom:0}
+.icon{width:34px;height:34px;display:grid;place-items:center;border-radius:12px;background:var(--surface2);font-size:17px;flex:none}
+.menu-info{flex:1;min-width:0}
+.menu-name{font-weight:650;font-size:var(--text-md)}
+.menu-meta{font-size:var(--text-sm);color:var(--muted);margin-top:3px}
+.tag{font-size:10px;padding:5px 8px;border-radius:999px;background:#f0e7dd;color:#705844;font-weight:700;white-space:nowrap}
+.task-card{padding:16px}
+.task{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:0;padding-bottom:0}
+.check{width:21px;height:21px;border:1.5px solid #bdb5a9;border-radius:7px;background:transparent;display:grid;place-items:center;flex:none;margin-top:1px;padding:0}
+.check.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.check.done:after{content:"✓";font-size:13px;font-weight:800}
+.task.done .task-text{text-decoration:line-through;color:#9a958c}
+.task-text{font-size:var(--text-md);line-height:1.4}
+.task-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(760px,100%);padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(255,253,249,.92);backdrop-filter:blur(18px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);z-index:30}
+.nav button{border:0;background:none;color:#8a847b;padding:6px 2px;border-radius:14px;font-size:10px;font-weight:650}
+.nav button.active{color:var(--accent);background:#f2e9df}
+.nav-icon{font-size:18px;display:block;line-height:1.15;margin-bottom:2px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{padding:15px 14px}
+.stat-num{font-size:22px;font-weight:750;letter-spacing:-.03em}
+.stat-label{font-size:11px;color:var(--muted);margin-top:3px}
+.timeline-day{margin-top:22px}
+.day-title{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.day-title span{font-size:12px;color:var(--muted)}
+.timeline-item{padding:15px 16px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+.plan-timeline-item{display:flex;gap:12px;align-items:flex-start;padding:15px 16px;border-bottom:1px solid var(--line)}
+.plan-timeline-item.single-line{align-items:center}
+.plan-timeline-item.single-line .check{margin-top:0}
+.plan-timeline-item:last-child{border-bottom:0}
+.plan-timeline-main{flex:1;min-width:0}
+.plan-timeline-time{font-size:12px;font-weight:700;color:var(--accent);flex:none;min-width:72px;text-align:right;padding-top:2px}
+.plan-edit-row{display:grid;grid-template-columns:1fr;gap:8px;padding:13px 0;border-bottom:1px solid var(--line)}
+.plan-edit-row:last-child{border-bottom:0}
+.plan-edit-fields{display:grid;grid-template-columns:110px 1fr;gap:8px}
+.plan-edit-fields input,.plan-edit-fields select{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#fff;font-size:13px;box-sizing:border-box}
+.plan-edit-actions{display:flex;gap:8px;justify-content:flex-end}
+.plan-edit-actions button{border:0;border-radius:9px;padding:7px 9px;font-size:12px}
+.timeline-item:last-child{border-bottom:0}
+.time{width:58px;font-size:12px;font-weight:700;color:var(--accent);flex:none;padding-top:2px}
+.recipe-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);margin-top:5px;flex:none}
+.timeline-content{flex:1}
+.timeline-title{font-size:var(--text-md);font-weight:700}
+.timeline-sub{font-size:var(--text-sm);color:var(--muted);margin-top:3px}
+.recipe-list{display:grid;gap:12px}
+.guest-card{padding:18px}.guest-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800;margin-bottom:9px}.guest-list{display:flex;flex-wrap:wrap;gap:7px}.guest-chip{background:#eee7df;border-radius:999px;padding:7px 10px;font-size:12px}.guest-chip.maybe{background:#f5f0ea}.maybe-label{margin-top:16px}.recipe-link{border:0;background:none;padding:0;cursor:pointer;text-align:left}.recipe-card{padding:17px;display:flex;gap:13px;align-items:center}.recipe-card-body{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-width:0}
+.recipe-card .icon{width:44px;height:44px;font-size:21px}
+.recipe-card-body{flex:1}
+.recipe-card-title{font-size:var(--text-md);font-weight:600;line-height:1.35}
+.recipe-card-meta{font-size:var(--text-sm);color:var(--muted);margin-top:4px;line-height:1.35}
+.chev{font-size:20px;color:#aaa39a}
+.back{border:0;background:none;padding:4px 0;color:var(--accent);font-weight:700}
+.recipe-head{padding:4px 0 16px}.recipe-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}.recipe-actions .scale{margin-left:auto}
+.recipe-head h1{font-size:28px;line-height:1.08}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);background:#ebe5dd;padding:4px;border-radius:14px;margin:0 0 16px}
+.tabs button{border:0;background:none;padding:9px 4px;border-radius:11px;font-size:12px;font-weight:700;color:#817a71}
+.tabs button.active{background:var(--surface);color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.ingredient-section{padding:16px}
+.ingredient-section + .ingredient-section{border-top:1px solid var(--line)}
+.ing-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.ing-row:last-child{border-bottom:0}
+.ing-qty{font-weight:700;min-width:88px;font-size:13px}
+.ing-name{font-size:13px;flex:1}
+.scale{display:flex;align-items:center;gap:8px}
+.scale button{width:30px;height:30px;border:1px solid var(--line);background:var(--surface);border-radius:9px}
+.scale-value{min-width:58px;text-align:center;font-weight:700;font-size:13px}
+.note{font-size:12px;color:var(--muted);background:#f3eee8;border-radius:14px;padding:12px 13px;line-height:1.45}
+.instruction{padding:17px 16px;border-bottom:1px solid var(--line)}
+.instruction:last-child{border-bottom:0}
+.instruction-head{display:flex;gap:10px;align-items:flex-start}
+.step-num{width:28px;height:28px;border-radius:10px;background:var(--accent2);color:var(--accent);display:grid;place-items:center;font-weight:800;font-size:12px;flex:none}
+.instruction-text{font-size:var(--text-md);line-height:1.55;flex:1;min-width:0}
+.timeline-title.done,.instruction-text.done{text-decoration:line-through;color:#9a958c}
+.instruction .check{margin-top:4px}
+.plan-block{padding:16px}
+.plan-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.plan-row:last-child{border-bottom:0}
+.plan-date{font-size:11px;color:var(--muted);width:68px;flex:none}
+.plan-main{flex:1}
+.plan-main strong{font-size:13px}
+.plan-main div{font-size:12px;color:var(--muted);margin-top:3px}
+.grocery-group{margin-top:20px}
+.grocery-group h3{color:#655e55;font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+.grocery-row{padding:15px 16px;border-bottom:1px solid var(--line)}
+.grocery-row:last-child{border-bottom:0}
+.grocery-top{display:flex;align-items:center;gap:10px}
+.grocery-name{font-weight:700;flex:1}
+.grocery-qty{font-size:12px;color:var(--muted);text-align:right}
+.grocery-bottom{margin:8px 0 0 31px;font-size:11px;color:var(--muted);line-height:1.45}
+.grocery-bottom div+div{margin-top:2px}
+.grocery-edit-card{padding:4px 0}
+.grocery-edit-row{display:flex;gap:10px;align-items:center;padding:13px 16px;border-bottom:1px solid var(--line)}
+.grocery-edit-row:last-child{border-bottom:0}
+.grocery-edit-name{font-weight:700;flex:1;min-width:0}
+.grocery-edit-required{font-size:11px;color:var(--muted);margin-top:3px}
+.grocery-edit-input{width:104px;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#fff;font-size:13px;text-align:right}
+.grocery-edit-actions{display:flex;gap:8px;justify-content:flex-end;margin:16px 0 6px}
+.have-row{margin:9px 0 0 31px;display:flex;gap:7px;align-items:center}
+.have-row label{font-size:11px;color:var(--muted)}
+.have-input{width:70px;border:1px solid var(--line);border-radius:9px;padding:6px 8px;background:#fff;font-size:12px}
+.cook-hero{padding:22px;margin-top:8px;background:linear-gradient(145deg,#fffdf9,#f1e9df)}
+.cook-hero .date{color:var(--muted)}
+.cook-hero .cook-summary{margin-top:18px;color:var(--muted);font-size:13px}
+.now{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#cfc3b7;font-weight:800;margin-bottom:7px}
+.big-task{font-size:21px;font-weight:750;letter-spacing:-.025em}
+.cook-list .timeline-item{padding:16px 16px 16px 32px}
+.cook-list .time{color:var(--accent)}
+.btn{border:0;border-radius:13px;padding:11px 14px;font-weight:750;font-size:13px}
+.btn-primary{background:var(--accent);color:white}
+.btn-secondary{background:#eee7df;color:#62584e}
+.toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin:10px 0 16px}
+.empty{padding:26px;text-align:center;color:var(--muted);font-size:13px}
+.modal-backdrop{position:fixed;inset:0;background:rgba(25,22,19,.35);z-index:50;display:grid;align-items:end}
+.modal{background:var(--surface);border-radius:24px 24px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom));max-height:82vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.close{border:0;background:#eee8e0;width:32px;height:32px;border-radius:50%}
+.confirm-actions{display:flex;gap:9px;margin-top:16px}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(15px);background:#2d2a26;color:white;padding:10px 14px;border-radius:999px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;z-index:70}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Whole-row checklist interaction */
+.checkable-row{cursor:pointer;transition:background .16s ease}
+.checkable-row:active{background:#faf6f0}
+.checkable-row:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+/* Cook timeline */
+.cook-list .timeline-item{display:flex;align-items:center;gap:12px;padding:16px 18px}
+.cook-list .cook-check{order:1;margin-top:0}
+.cook-list .timeline-content{order:2}
+.cook-list .cook-time{order:3;width:auto;min-width:76px;text-align:right;padding:0;font-size:12px;font-weight:750;color:var(--accent);white-space:nowrap}
+.cook-description{font-size:var(--text-md);line-height:1.4;font-weight:600}
+.cook-dish{font-size:var(--text-xs);line-height:1.35;color:var(--muted);margin-top:4px}
+.cook-dish-link{border:0;background:none;padding:0;color:var(--muted);font:inherit;text-align:left}
+.cook-edit-row{display:grid;grid-template-columns:1fr;gap:9px;padding:14px 0;border-bottom:1px solid var(--line)}
+.cook-edit-row:last-child{border-bottom:0}
+.cook-edit-row input,.cook-edit-row select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;font-size:13px}
+.cook-edit-actions{display:flex;justify-content:flex-end}
+.grocery-add-card{padding:16px}
+.grocery-add-grid{display:grid;grid-template-columns:1fr;gap:9px}
+.grocery-add-grid input,.grocery-add-grid select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;font-size:13px}
+.grocery-custom-note{font-size:11px;color:var(--muted);margin-top:6px}
+
+
+/* Typography consistency pass */
+.menu-name{font-size:var(--text-md);font-weight:600;line-height:1.35}
+.menu-meta{font-size:var(--text-sm);font-weight:400;line-height:1.35}
+.grocery-group h3{font-size:var(--text-sm);font-weight:600;line-height:1.35;letter-spacing:.08em}
+.grocery-name{font-size:var(--text-md);font-weight:600;line-height:1.35}
+.grocery-qty{font-size:var(--text-sm);font-weight:400}
+.grocery-bottom{font-size:var(--text-xs);font-weight:400;line-height:1.4}
+
+.plan-timeline-item{font-size:var(--text-md)}
+.day-title h2{font-size:var(--text-xl);font-weight:700}
+.day-title span{font-size:var(--text-sm);font-weight:400}
+.timeline-title{font-size:var(--text-md);font-weight:550;line-height:1.4}
+.timeline-sub{font-size:var(--text-sm);font-weight:400;line-height:1.35}
+.plan-timeline-time{font-size:var(--text-sm);font-weight:600;line-height:1.35}
+
+.cook-description{font-size:var(--text-md);line-height:1.4;font-weight:550;letter-spacing:0}
+.cook-dish{font-size:var(--text-xs);line-height:1.35;font-weight:400}
+.cook-list .cook-time{font-size:var(--text-sm);font-weight:550;line-height:1.35}
+.cook-summary{font-size:var(--text-sm)!important;line-height:1.45;font-weight:400}
+
+@media(min-width:700px){.app{padding-bottom:40px}.nav{bottom:18px;border:1px solid var(--line);border-radius:22px;width:720px}.screen{padding-left:28px;padding-right:28px}header{padding-left:28px;padding-right:28px}}
+
+
+/* Edit Event — mirrors the visual language of Home */
+.edit-event .back{margin-bottom:4px}
+.edit-event .recipe-head{padding-bottom:8px}
+.edit-section{margin-top:22px}
+.edit-section .section-head{margin-bottom:10px}
+.edit-card{padding:18px}
+.edit-field{display:block;margin:0 0 15px}
+.edit-field:last-child{margin-bottom:0}
+.edit-field > span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 7px}
+.edit-input,.edit-select{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px 12px;background:#fffdf9;color:var(--ink);font-size:14px;line-height:1.35;outline:none;box-shadow:none}
+.edit-input:focus,.edit-select:focus{border-color:#bca895;box-shadow:0 0 0 3px rgba(125,95,75,.08)}
+.edit-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.edit-menu-row,.edit-guest-row{padding:15px 0;border-bottom:1px solid var(--line)}
+.edit-menu-row:last-child,.edit-guest-row:last-child{border-bottom:0}
+.edit-menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
+.edit-menu-grid .full{grid-column:1/-1}
+.edit-row-top{display:flex;align-items:center;gap:10px}
+.edit-row-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:var(--surface2);font-size:17px;flex:none}
+.edit-row-title{flex:1;min-width:0}
+.edit-row-title .edit-input{font-weight:600}
+.icon-trash{width:34px;height:34px;border:0;background:#fbe9e7;color:#b53a32;border-radius:10px;display:grid;place-items:center;font-size:17px;flex:none}
+.edit-guest-row{display:flex;align-items:center;gap:9px}
+.edit-guest-row .edit-input{flex:1;min-width:0}
+.guest-status-btn{border:0;border-radius:10px;padding:9px 10px;background:#eee7df;color:#62584e;font-size:12px;font-weight:650;white-space:nowrap}
+.edit-add{margin-top:12px;width:100%}
+.edit-actions{display:flex;justify-content:flex-end;margin-top:22px}
+@media(max-width:430px){.edit-menu-grid{grid-template-columns:1fr}.edit-menu-grid .full{grid-column:auto}.edit-two{gap:8px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header id="header"></header>
+<main id="screen" class="screen">
+  <!-- Static first paint / no-JavaScript fallback.
+       This also lets embedded file previews show the app instead of a blank page. -->
+  <div class="hero card">
+    <div class="eyebrow">Your birthday dinner</div>
+    <div class="hero-grid">
+      <div>
+        <h1>Birthday Dinner</h1>
+        <div class="date">Saturday, September 12 · 5:00 PM – 11:00 PM</div>
+      </div>
+      
+    </div>
+    <div class="count">9 confirmed guests: Ted, Judy, Charlene, Shannon, Elvin, Kaylee, Daniel, Roy, Ryan<br>Maybe: Alex, Morgan</div>
+  </div>
+
+  <div class="section">
+    <div class="section-head"><h2>Tonight's menu</h2></div>
+    <div class="card menu-card">
+      <div class="menu-row"><span class="icon">🥗</span><div class="menu-info"><div class="menu-name">Apple Salad</div><div class="menu-meta">Appetizer</div></div><span class="tag">Shannon</span></div>
+      <div class="menu-row"><span class="icon">🌽</span><div class="menu-info"><div class="menu-name">Mexican Grilled Corn</div><div class="menu-meta">Appetizer</div></div><span class="tag">Elvin</span></div>
+      <div class="menu-row"><span class="icon">🥩</span><div class="menu-info"><div class="menu-name">Maple Syrup Braised Beef</div><div class="menu-meta">Main · You</div></div><span class="tag">Judy</span></div>
+      <div class="menu-row"><span class="icon">🍎</span><div class="menu-info"><div class="menu-name">Apple Cider Glazed Chicken Thighs</div><div class="menu-meta">Main · You</div></div><span class="tag">Judy</span></div>
+      <div class="menu-row"><span class="icon">🌶️</span><div class="menu-info"><div class="menu-name">Creamy Slightly Spicy Pasta</div><div class="menu-meta">Main</div></div><span class="tag">Shannon + Elvin</span></div>
+      <div class="menu-row"><span class="icon">🍅</span><div class="menu-info"><div class="menu-name">Ratatouille</div><div class="menu-meta">Side · You</div></div><span class="tag">Judy</span></div>
+      <div class="menu-row"><span class="icon">🫐</span><div class="menu-info"><div class="menu-name">Blueberry Roll Cake Cheesecake</div><div class="menu-meta">Dessert · You</div></div><span class="tag">Judy</span></div>
+      <div class="menu-row"><span class="icon">🫖</span><div class="menu-info"><div class="menu-name">Fruit Tea / Caffeine-Free Drink</div><div class="menu-meta">Drink</div></div><span class="tag">Shannon + Elvin</span></div>
+    </div>
+  </div>
+
+  <div class="section"><div class="section-head"><h2>Guests</h2></div><div class="card guest-card"><div class="guest-label">Confirmed · 9</div><div class="guest-list"><span class="guest-chip">Ted</span><span class="guest-chip">Judy</span><span class="guest-chip">Charlene</span><span class="guest-chip">Shannon</span><span class="guest-chip">Elvin</span><span class="guest-chip">Kaylee</span><span class="guest-chip">Daniel</span><span class="guest-chip">Roy</span><span class="guest-chip">Ryan</span></div><div class="guest-label maybe-label">Maybe · 2</div><div class="guest-list"><span class="guest-chip maybe">Alex</span><span class="guest-chip maybe">Morgan</span></div></div></div>
+</main>
+<nav id="nav" class="nav">
+  <button class="active"><span class="nav-icon">🏠</span>Home</button>
+  <button><span class="nav-icon">🛒</span>Grocery</button>
+  <button><span class="nav-icon">🕗</span>Plan</button>
+  <button><span class="nav-icon">🔥</span>Cook</button>
+  <button><span class="nav-icon">📝</span>Recipes</button>
+</nav>
+</div>
+<div id="modalRoot"></div>
+<div id="toast" class="toast"></div>
+
+<script>
+const EVENT = {
+  name:"Birthday Dinner", date:"Saturday, September 12", start:"5:00 PM", end:"11:00 PM",
+  confirmed:["Ted","Judy","Charlene","Shannon","Elvin","Kaylee","Daniel","Roy","Ryan"],
+  maybe:["Alex","Morgan"]
+};
+
+const menu = [
+ {id:"salad",icon:"🥗",name:"Apple Salad",category:"Appetizer",owner:"Shannon",managed:false},
+ {id:"corn",icon:"🌽",name:"Mexican Grilled Corn",category:"Appetizer",owner:"Elvin",managed:false},
+ {id:"beef",icon:"🥩",name:"Maple Syrup Braised Beef",category:"Main",owner:"Judy",managed:true},
+ {id:"chicken",icon:"🍎",name:"Apple Cider Glazed Chicken Thighs",category:"Main",owner:"Judy",managed:true},
+ {id:"pasta",icon:"🌶️",name:"Creamy Slightly Spicy Pasta",category:"Main",owner:"Shannon + Elvin",managed:false},
+ {id:"ratatouille",icon:"🍅",name:"Ratatouille",category:"Side",owner:"Judy",managed:true},
+ {id:"cheesecake",icon:"🫐",name:"Blueberry Roll Cake Cheesecake",category:"Dessert",owner:"Judy",managed:true},
+ {id:"drink",icon:"🫖",name:"Fruit Tea / Caffeine-Free Drink",category:"Drink",owner:"Shannon + Elvin",managed:false}
+];
+
+const recipes = {
+ beef:{
+  name:"Maple Syrup Braised Beef", icon:"🥩", category:"Main", base:10.5, defaultServings:10.5, cookTime:"2.5–3 hr", originalUrl:"https://www.instagram.com/reel/DaApAf2Ac4i/?stkn=dXVveGFxNmd2MjR2", originalLabel:"View original on Instagram",
+  ingredients:[
+   ["beef","1.8 kg","Beef short ribs, cut into chunks","protein"],
+   ["maple","10.5–12 tbsp","Maple syrup","pantry"],
+   ["balsamic","9 tbsp","Balsamic vinegar","pantry"],
+   ["salt","1.5 tsp","Salt","pantry"],
+   ["pepper","1.5 tsp","Black pepper","pantry"],
+   ["water","as needed","Water","pantry"]
+  ],
+  steps:[
+   ["Sear 1.8 kg beef in batches until well browned.","2"],
+   ["Add 10.5–12 tbsp maple syrup + 9 tbsp balsamic vinegar and toss quickly.","2"],
+   ["Add enough water to come just below the beef.","2"],
+   ["Add 1.5 tsp salt + 1.5 tsp black pepper.","2"],
+   ["Cover and braise for 2.5–3 hours until tender.","2"],
+   ["Uncover and reduce sauce for 5–10 min.","2"],
+   ["Cool and refrigerate overnight.","2"],
+   ["Saturday: slowly reheat until hot.","2"]
+  ],
+  plan:[
+   ["Fri","Cook","Cook → cool → refrigerate","Friday"],
+   ["Sat","1:30 PM","Slowly reheat","Saturday"]
+  ]
+ },
+ chicken:{
+  name:"Apple Cider Glazed Chicken Thighs", icon:"🍎", category:"Main", base:8, defaultServings:8, cookTime:"20–25 min", originalUrl:"https://www.instagram.com/p/DPkOCNXAbsC/?stkn=cHNvcHE5YjVrczdw", originalLabel:"View original on Instagram",
+  ingredients:[
+   ["chicken","8","Chicken thighs","protein"],
+   ["cider","2 cups / 475 mL","Apple cider","drinks"],
+   ["dijon","2 tbsp","Dijon mustard","pantry"],
+   ["garlic-chicken","4 cloves","Garlic, minced","produce"],
+   ["oil-chicken","2 tbsp","Olive oil","pantry"],
+   ["rosemary","2 tsp","Fresh rosemary, chopped","produce"],
+   ["salt-chicken","as needed","Salt","pantry"],
+   ["pepper-chicken","as needed","Black pepper","pantry"]
+  ],
+  steps:[
+   ["Season 8 chicken thighs with salt and pepper.","2"],
+   ["Heat 2 tbsp olive oil and sear chicken for 4–5 min per side.","2"],
+   ["Whisk together 2 cups apple cider + 2 tbsp Dijon + 4 cloves garlic + 2 tsp rosemary.","2"],
+   ["Pour mixture into skillet.","2"],
+   ["Reduce heat and simmer 10–12 min, until chicken is cooked and sauce thickens.","2"],
+   ["Spoon glaze over chicken before serving.","2"]
+  ],
+  plan:[
+   ["Thu","Prep","Trim chicken; mince garlic; chop rosemary; mix cider + Dijon + garlic + rosemary; season chicken","Thursday"],
+   ["Sat","2:45 PM","Cook as close to serving as practical","Saturday"]
+  ]
+ },
+ ratatouille:{
+  name:"Ratatouille", icon:"🍅", category:"Side", base:10.5, defaultServings:10.5, cookTime:"45 min", originalUrl:"https://www.instagram.com/reel/DahaXolu60N/?stkn=dHhxbnZ1bjl6d3U=", originalLabel:"View original on Instagram",
+  ingredients:[
+   ["tomatoes","3","Tomatoes","produce"],
+   ["eggplant","1.5","Eggplant","produce"],
+   ["zucchini","1.5","Zucchini","produce"],
+   ["onion","0.75","White onion","produce"],
+   ["pepper-rat","0.75","Bell pepper","produce"],
+   ["garlic-rat","4.5–6","Single-clove garlic pieces","produce"],
+   ["basil","3 g","Dried basil","pantry"],
+   ["canned-tomatoes","450 g","Canned tomatoes","pantry"],
+   ["oil-rat","as needed","Olive oil","pantry"],
+   ["salt-rat","as needed","Salt","pantry"],
+   ["pepper-rat","as needed","Black pepper","pantry"]
+  ],
+  steps:[
+   ["Chop ¾ onion + ¾ bell pepper + 4.5–6 garlic pieces.","1"],
+   ["Sauté onion in olive oil until softened.","1"],
+   ["Add garlic, then bell pepper.","1"],
+   ["Add 450 g canned tomatoes + 3 g dried basil + salt. Cover and simmer 15 min.","1"],
+   ["Blend until smooth and adjust seasoning. Cool and refrigerate.","1"],
+   ["Saturday: slice 3 tomatoes + 1.5 eggplants + 1.5 zucchini.","2"],
+   ["Spread the prepared tomato sauce into the baking dish.","2"],
+   ["Arrange the freshly sliced vegetables.","2"],
+   ["Brush with olive oil and season with salt.","2"],
+   ["Cover with parchment. Bake at 150°C / 300°F for 30 min.","2"],
+   ["Remove parchment and bake at 200°C / 400°F for 15 min.","2"],
+   ["Finish with black pepper.","2"]
+  ],
+  plan:[
+   ["Thu","Prep","Make tomato sauce → cool → refrigerate. Do not slice/arrange vegetables.","Thursday"],
+   ["Sat","2:00 PM","Slice vegetables + assemble","Saturday"],
+   ["Sat","2:15 PM","Bake: 150°C covered 30 min → 200°C uncovered 15 min","Saturday"]
+  ]
+ },
+ cheesecake:{
+  name:"Blueberry Roll Cake Cheesecake", icon:"🫐", category:"Dessert", base:8, defaultServings:8, cookTime:"—", originalUrl:"https://www.youtube.com/watch?v=aMMFvAj9WMo&list=PLBH9JSRhCJiQ&index=9", originalLabel:"View original on YouTube",
+  ingredients:[
+   ["blueberries","280 g","Blueberries","produce"],
+   ["sugar-puree","70 g","Sugar — blueberry puree","pantry"],
+   ["lemon-puree","10 g","Lemon juice — puree","produce"],
+   ["yolks","3","Egg yolks","dairy"],
+   ["sugar-roll","15 g","Sugar — roll cake yolks","pantry"],
+   ["vanilla","3 g","Vanilla extract","pantry"],
+   ["milk","45 g","Milk","dairy"],
+   ["veg-oil","23 g","Vegetable oil","pantry"],
+   ["cake-flour","45 g","Cake flour","baking"],
+   ["cornstarch","3 g","Cornstarch","baking"],
+   ["whites","3","Egg whites","dairy"],
+   ["sugar-whites","45 g","Sugar — egg whites","pantry"],
+   ["cream-roll","130 g","Whipping cream — roll filling","dairy"],
+   ["sugar-fill","13 g","Sugar — roll filling","pantry"],
+   ["gelatin-cheese","6 g","Gelatin powder — cheesecake","baking"],
+   ["water-cheese","30 g","Water — cheesecake gelatin","pantry"],
+   ["cream-cheese","200 g","Cream cheese","dairy"],
+   ["sugar-cheese","20 g","Sugar — cheesecake","pantry"],
+   ["yogurt","40 g","Plain yogurt","dairy"],
+   ["puree-cheese","50 g","Blueberry puree — cheesecake","produce"],
+   ["lemon-cheese","5 g","Lemon juice — cheesecake","produce"],
+   ["cream-cheese-fill","120 g","Whipping cream — cheesecake","dairy"],
+   ["gelatin-jelly","5 g","Gelatin powder — jelly","baking"],
+   ["water-jelly","25 g","Water — jelly gelatin","pantry"],
+   ["puree-jelly","150 g","Blueberry puree — jelly","produce"],
+   ["water-jelly2","20 g","Water — jelly","pantry"]
+  ],
+  steps:[
+   ["Thursday: make blueberry puree using 280 g blueberries + 70 g sugar + 10 g lemon juice. Cool completely and refrigerate.","1"],
+   ["Friday: bake roll cake.","2"],
+   ["Friday: make cream filling and roll cake.","2"],
+   ["Friday: make cheesecake layer with 6 g gelatin, 200 g cream cheese, 40 g yogurt, 50 g blueberry puree, 120 g whipping cream, and 20 g sugar.","2"],
+   ["Friday: make blueberry jelly with 5 g gelatin + 150 g blueberry puree.","2"],
+   ["Friday: refrigerate the completed cake until Saturday.","2"]
+  ],
+  plan:[
+   ["Thu","Anytime","Make blueberry puree → cool → refrigerate","Thursday"],
+   ["Fri","Anytime","Complete the entire cake","Friday"],
+   ["Sat","4:15 PM","Take out, unmold/finish/slice, and put dessert out","Saturday"]
+  ],
+  note:"Original recipe is intentionally not scaled in this event. It makes 8 servings."
+ }
+};
+
+const groceryGroups = [
+ ["Produce",[
+  ["tomatoes","Tomatoes","3","Ratatouille × 3"],
+  ["eggplant","Eggplant","1.5 (buy 2)","Ratatouille × 1.5"],
+  ["zucchini","Zucchini","1.5 (buy 2)","Ratatouille × 1.5"],
+  ["onion","White onion","¾ (buy 1)","Ratatouille × ¾"],
+  ["bell","Bell pepper","¾ (buy 1)","Ratatouille × ¾"],
+  ["garlic","Garlic","4 cloves + 4.5–6 pieces","Chicken + Ratatouille"],
+  ["rosemary","Fresh rosemary","2 tsp","Chicken × 2 tsp"],
+  ["blueberries","Blueberries","280 g","Cheesecake × 280 g"],
+  ["lemon","Lemon juice","15 g","Cheesecake × 10 g + 5 g"]
+ ]],
+ ["Protein",[
+  ["beef","Beef short ribs","1.8 kg (buy ~2 kg)","Maple Beef × 1.8 kg"],
+  ["chicken","Chicken thighs","8 (buy 8–10)","Chicken × 8"]
+ ]],
+ ["Dairy & chilled",[
+  ["cream-cheese","Cream cheese","200 g","Cheesecake × 200 g"],
+  ["whipping","Whipping cream","250 g","Cheesecake × 130 g + 120 g"],
+  ["yogurt","Plain yogurt","40 g","Cheesecake × 40 g"],
+  ["milk","Milk","45 g","Cheesecake × 45 g"],
+  ["eggs","Eggs","3","Cheesecake × 3 yolks + 3 whites"]
+ ]],
+ ["Pantry & baking",[
+  ["maple","Maple syrup","10.5–12 tbsp","Maple Beef × 10.5–12 tbsp"],
+  ["balsamic","Balsamic vinegar","9 tbsp","Maple Beef × 9 tbsp"],
+  ["cider","Apple cider","2 cups / ~475 mL","Chicken × 2 cups"],
+  ["dijon","Dijon mustard","2 tbsp","Chicken × 2 tbsp"],
+  ["olive-oil","Olive oil","at least 2 tbsp + ratatouille","Chicken + Ratatouille"],
+  ["canned","Canned tomatoes","450 g","Ratatouille × 450 g"],
+  ["basil","Dried basil","3 g","Ratatouille × 3 g"],
+  ["sugar","Sugar","163 g","Cheesecake total"],
+  ["flour","Cake flour","45 g","Cheesecake × 45 g"],
+  ["cornstarch","Cornstarch","3 g","Cheesecake × 3 g"],
+  ["gelatin","Gelatin powder","11 g","Cheesecake × 6 g + 5 g"],
+  ["vanilla","Vanilla extract","3 g","Cheesecake × 3 g"],
+  ["vegetable-oil","Vegetable oil","23 g","Cheesecake × 23 g"],
+  ["salt","Salt","As needed + 1.5 tsp beef","Beef + Chicken + Ratatouille"],
+  ["black-pepper","Black pepper","As needed + 1.5 tsp beef","Beef + Chicken + Ratatouille"],
+ ]]
+];
+
+const baseState = {
+ page:"home", recipe:null, recipeTab:"ingredients",
+ checks:{}, purchased:{}, have:{}, serving:{beef:10.5,chicken:8,ratatouille:10.5,cheesecake:8},
+ customIngredients:[], customCategories:[], cookTimeline:null, customRecipes:[], menuItems:null, event:{name:"Birthday Dinner",date:"Saturday, September 12",start:"5:00 PM",end:"11:00 PM",confirmed:["Ted","Judy","Charlene","Shannon","Elvin","Kaylee","Daniel","Roy","Ryan"],maybe:["Alex","Morgan"]}
+};
+// Storage is wrapped because some embedded previews (including sandboxed
+// iframes) intentionally disable localStorage. The app still works there;
+// persistence is used automatically when storage is available.
+const storage = {
+  get(key) {
+    try { return localStorage.getItem(key); } catch (_) { return null; }
+  },
+  set(key, value) {
+    try { localStorage.setItem(key, value); } catch (_) {}
+  }
+};
+
+let savedState = {};
+try { savedState = JSON.parse(storage.get("tableState") || "{}") || {}; } catch (_) { savedState = {}; }
+
+let state = {...baseState, ...savedState};
+state.checks=state.checks||{}; state.purchased=state.purchased||{}; state.have=state.have||{}; state.customIngredients=state.customIngredients||[]; state.customCategories=state.customCategories||[]; state.cookTimeline=state.cookTimeline||null; state.menuItems=state.menuItems||null; state.serving={...baseState.serving,...(state.serving||{})}; state.event={...baseState.event,...(state.event||{}),confirmed:[...(state.event?.confirmed||baseState.event.confirmed)],maybe:[...(state.event?.maybe||baseState.event.maybe)]};
+
+function save(){storage.set("tableState",JSON.stringify(state))}
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1500)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function scaleQty(text, factor){
+  if(!text || /as needed/i.test(text)) return text;
+  const m=text.match(/^(\d+(?:\.\d+)?)(.*)$/); if(!m) return text;
+  let n=parseFloat(m[1])*factor;
+  const rounded=Math.round(n*10)/10;
+  return String(rounded).replace(".0","")+m[2];
+}
+function ingredientDisplay(r,id,qty){
+  const ing=r.ingredients.find(x=>x[0]===id); if(!ing) return "";
+  const factor=qty/r.defaultServings;
+  if(r.id==="cheesecake") return ing[1];
+  if(ing[1].includes("–")) {
+    const parts=ing[1].split("–").map(x=>x.trim());
+    const a=parseFloat(parts[0]), b=parseFloat(parts[1]);
+    if(!isNaN(a)&&!isNaN(b)) return `${Math.round(a*factor*10)/10}–${Math.round(b*factor*10)/10}${ing[1].replace(/[\d.]+–[\d.]+/,"")}`;
+  }
+  return scaleQty(ing[1],factor);
+}
+function stepText(r, text){
+  if(r.id==="cheesecake" || r.defaultServings===1) return text;
+  const factor=state.serving[r.id]/r.defaultServings;
+  return text.replace(/(\d+(?:\.\d+)?(?:\.\d+)?)(\s*(?:kg|g|ml|cups?|tbsp|tsp|cloves?|°C|°F))/g,(m,n,u)=>String(Math.round(parseFloat(n)*factor*10)/10).replace(".0","")+u);
+}
+function allManagedTasks(){
+  const arr=[];
+  Object.entries(recipes).forEach(([rid,r])=>r.steps.forEach((s,i)=>arr.push({id:`step:${rid}:${i}`,text:s[0],rid,recipe:r.name})));
+  const personal=[
+   ["Wed","Grocery shopping","Grocery"],
+   ["Wed","Check ingredients","General"],
+   ["Wed","Organize fridge","General"],
+   ["Wed","Prepare / confirm cookware and serving dishes","General"],
+   ["Fri","Hair-color appointment","Personal"],
+   ["Fri","Organize serving dishes and kitchen","General"],
+   ["Fri","Set up anything that can be done ahead","General"],
+   ["Sat","Shower, hair, makeup, and get dressed","Personal"],
+   ["Sat","Final buffet setup","General"],
+   ["Sat","Take cheesecake out, finish, and slice","Blueberry Roll Cake Cheesecake"],
+   ["Sat","Final table / lighting / music setup","General"]
+  ];
+  personal.forEach((x,i)=>arr.push({id:`personal:${i}`,text:x[1],rid:null,recipe:x[2]}));
+  return arr;
+}
+function isChecked(id){return !!state.checks[id]}
+function toggle(id){state.checks[id]=!state.checks[id];save();render()}
+function progressFor(prefixes){
+  const tasks=allManagedTasks().filter(t=>prefixes.some(p=>t.id.startsWith(p)));
+  const done=tasks.filter(t=>isChecked(t.id)).length; return [done,tasks.length];
+}
+function headerFor(title,subtitle){
+ return `<div class="topline"><div><h1>${esc(title)}</h1>${subtitle?`<div class="date">${esc(subtitle)}</div>`:""}</div></div>`;
+}
+function nav(){
+ const items=[["home","🏠","Home"],["grocery","🛒","Grocery"],["plan","🕗","Plan"],["cook","🔥","Cook"],["recipes","📝","Recipes"]];
+ return items.map(x=>`<button class="${state.page===x[0]?'active':''}" onclick="go('${x[0]}')"><span class="nav-icon">${x[1]}</span>${x[2]}</button>`).join("");
+}
+function go(page){state.page=page;state.recipe=null;save();render();window.scrollTo({top:0,behavior:"smooth"})}
+function openPlanEdit(){state.page="planEdit";state.recipe=null;save();render();window.scrollTo({top:0,behavior:"smooth"})}
+function openRecipe(id){state.page="recipe";state.recipe=id;state.recipeTab="ingredients";save();render();window.scrollTo({top:0,behavior:"smooth"})}
+function allRecipes(){return {...recipes}}
+function getMenu(){return state.menuItems||menu}
+function recipeOptions(selected){return Object.entries(allRecipes()).map(([id,r])=>`<option value="${id}" ${selected===id?'selected':''}>${esc(r.name)}</option>`).join('')}
+function openHomeEdit(){state.page="homeEdit";save();render();window.scrollTo({top:0,behavior:"smooth"})}
+function updateEvent(key,value){state.event[key]=value;save()}
+function saveHomeEdit(){state.menuItems=getMenu();save();state.page='home';render();toast('Event updated')}
+function addGuest(status){const name=prompt('Guest name');if(!name||!name.trim())return;state.event[status].push(name.trim());save();render()}
+function updateGuest(status,i,value){state.event[status][i]=value;save()}
+function removeGuest(status,i){if(confirm(`Remove ${state.event[status][i]}?`)){state.event[status].splice(i,1);save();render()}}
+function moveGuest(status,i,to){const name=state.event[status].splice(i,1)[0];state.event[to].push(name);save();render()}
+function addMenuItem(){const name=prompt('Menu item name');if(!name||!name.trim())return;const items=getMenu().slice();items.push({id:'menu-'+Date.now(),icon:'🍽️',name:name.trim(),category:'Main',owner:'Judy',managed:true,recipeId:''});state.menuItems=items;save();render()}
+function updateMenuItem(i,key,value){const items=getMenu().slice();items[i]={...items[i],[key]:value};state.menuItems=items;save()}
+function linkMenuRecipe(i,id){const items=getMenu().slice();items[i]={...items[i],recipeId:id,managed:!!id};state.menuItems=items;save();render()}
+function removeMenuItem(i){const items=getMenu().slice();if(confirm(`Remove ${items[i].name} from tonight's menu?`)){items.splice(i,1);state.menuItems=items;save();render()}}
+function render(){
+ document.getElementById("nav").innerHTML=nav();
+ const h=document.getElementById("header");
+ const s=document.getElementById("screen");
+ h.className="";
+ if(state.page==="home"){h.innerHTML="";s.innerHTML=home()}
+ else if(state.page==="grocery"){h.className="nonsticky";h.innerHTML=headerFor("Grocery","Everything needed for the dishes you're responsible for");s.innerHTML=grocery()}
+ else if(state.page==="homeEdit"){h.innerHTML="";s.innerHTML=homeEdit()}
+ else if(state.page==="groceryEdit"){h.className="nonsticky";h.innerHTML=headerFor("Adjust quantities","Update what you already have at home");s.innerHTML=groceryEdit()}
+ else if(state.page==="plan"){h.className="nonsticky";h.innerHTML=headerFor("Plan","Wednesday → Saturday");s.innerHTML=plan()}
+ else if(state.page==="planEdit"){h.innerHTML="";s.innerHTML=planEdit()}
+ else if(state.page==="cook"){h.innerHTML="";s.innerHTML=cook()}
+ else if(state.page==="cookEdit"){h.className="nonsticky";h.innerHTML="";s.innerHTML=cookEdit()}
+ else if(state.page==="recipes"){h.innerHTML=headerFor("Recipes","Your dishes");s.innerHTML=recipesPage()}
+ else if(state.page==="recipe"){h.innerHTML="";s.innerHTML=recipePage(state.recipe)}
+}
+function home(){
+ const items=getMenu();
+ return `<div class="hero card home-editable" onclick="openHomeEdit()"><div class="eyebrow">Your birthday dinner</div><div class="hero-grid"><div><h1>${esc(state.event.name)}</h1><div class="date">${esc(state.event.date)} · ${esc(state.event.start)} – ${esc(state.event.end)}</div></div><span class="chev">✎</span></div></div>
+ <div class="section"><div class="section-head"><h2>Tonight's menu</h2><button class="link" onclick="event.stopPropagation();openHomeEdit()">Edit</button></div><div class="card menu-card">${items.map((m,i)=>{const rid=m.recipeId||(m.managed&&recipes[m.id]?m.id:'');return `<div class="menu-row" ${rid?`onclick="openRecipe('${rid}')" style="cursor:pointer"`:''}><span class="icon">${m.icon||'🍽️'}</span><div class="menu-info"><div class="menu-name">${esc(m.name)}${rid?` <span class="chev">›</span>`:''}</div><div class="menu-meta">${esc(m.category)}</div></div><span class="tag">${esc(m.owner||'')}</span></div>`}).join('')}</div></div>
+ <div class="section"><div class="section-head"><h2>Guests</h2><button class="link" onclick="openHomeEdit()">Edit</button></div><div class="card guest-card"><div class="guest-label">Confirmed · ${state.event.confirmed.length}</div><div class="guest-list">${state.event.confirmed.map(g=>`<span class="guest-chip">${esc(g)}</span>`).join('')}</div><div class="guest-label maybe-label">Maybe · ${state.event.maybe.length}</div><div class="guest-list">${state.event.maybe.map(g=>`<span class="guest-chip maybe">${esc(g)}</span>`).join('')}</div></div></div>`;
+}
+function homeEdit(){
+ const items=getMenu();
+ return `<div class="edit-event">
+  <button class="back" onclick="go('home')">← Back to Home</button>
+  <div class="recipe-head"><div class="eyebrow">Customize event</div><h1>Edit Event</h1><div class="date">Make changes to your event, menu, and guests.</div></div>
+
+  <div class="edit-section">
+   <div class="section-head"><h2>Event details</h2></div>
+   <div class="card edit-card">
+    <label class="edit-field"><span>Event title</span><input class="edit-input" value="${esc(state.event.name)}" oninput="updateEvent('name',this.value)"></label>
+    <label class="edit-field"><span>Date</span><input class="edit-input" value="${esc(state.event.date)}" oninput="updateEvent('date',this.value)"></label>
+    <div class="edit-two">
+      <label class="edit-field"><span>Start</span><input class="edit-input" value="${esc(state.event.start)}" oninput="updateEvent('start',this.value)"></label>
+      <label class="edit-field"><span>End</span><input class="edit-input" value="${esc(state.event.end)}" oninput="updateEvent('end',this.value)"></label>
+    </div>
+   </div>
+  </div>
+
+  <div class="edit-section">
+   <div class="section-head"><h2>Tonight's menu</h2><button class="btn btn-secondary" onclick="addMenuItem()">+ Add item</button></div>
+   <div class="card edit-card">
+    ${items.map((m,i)=>`<div class="edit-menu-row">
+      <div class="edit-row-top"><span class="edit-row-icon">${m.icon||'🍽️'}</span><div class="edit-row-title"><input class="edit-input" value="${esc(m.name)}" aria-label="Menu item name" oninput="updateMenuItem(${i},'name',this.value)"></div><button class="icon-trash" aria-label="Remove ${esc(m.name)}" title="Remove" onclick="removeMenuItem(${i})">🗑</button></div>
+      <div class="edit-menu-grid">
+       <label class="edit-field"><span>Category</span><select class="edit-select" onchange="updateMenuItem(${i},'category',this.value)">${['Appetizer','Main','Side','Dessert','Sauce','Drink'].map(c=>`<option ${m.category===c?'selected':''}>${c}</option>`).join('')}</select></label>
+       <label class="edit-field"><span>Responsible</span><input class="edit-input" value="${esc(m.owner||'')}" placeholder="e.g. Judy or Shannon + Elvin" oninput="updateMenuItem(${i},'owner',this.value)"></label>
+       <label class="edit-field full"><span>Recipe</span><select class="edit-select" onchange="linkMenuRecipe(${i},this.value)"><option value="">No recipe</option>${recipeOptions(m.recipeId||(m.managed&&recipes[m.id]?m.id:''))}</select></label>
+      </div>
+    </div>`).join('')}
+    <button class="btn btn-secondary edit-add" onclick="addMenuItem()">+ Add menu item</button>
+   </div>
+  </div>
+
+  <div class="edit-section">
+   <div class="section-head"><h2>Guests</h2></div>
+   <div class="card edit-card">
+    ${['confirmed','maybe'].map(st=>`<div class="guest-editor-group">
+      <div class="guest-label">${st==='confirmed'?'Confirmed':'Maybe'} · ${state.event[st].length}</div>
+      ${state.event[st].map((g,i)=>`<div class="edit-guest-row"><input class="edit-input" value="${esc(g)}" aria-label="Guest name" oninput="updateGuest('${st}',${i},this.value)">${st==='confirmed'?`<button class="guest-status-btn" onclick="moveGuest('confirmed',${i},'maybe')">Maybe</button>`:`<button class="guest-status-btn" onclick="moveGuest('maybe',${i},'confirmed')">Confirm</button>`}<button class="icon-trash" aria-label="Remove ${esc(g)}" title="Remove" onclick="removeGuest('${st}',${i})">🗑</button></div>`).join('')}
+      <button class="btn btn-secondary edit-add" onclick="addGuest('${st}')">+ Add ${st==='confirmed'?'confirmed':'maybe'} guest</button>
+    </div>`).join('')}
+   </div>
+  </div>
+
+  <div class="edit-actions"><button class="btn btn-primary" onclick="go('home')">Done</button></div>
+ </div>`
+}
+function recipeEdit(){const r=state.recipe==='new'?{name:'',category:'Main',defaultServings:1,cookTime:'',originalUrl:'',ingredients:[]}:allRecipes()[state.recipe];return `<button class="back" onclick="go('recipes')">← Recipes</button><div class="recipe-head"><div class="eyebrow">Recipe editor</div><h1>${state.recipe==='new'?'Add Recipe':'Edit Recipe'}</h1></div><div class="card form-card"><label>Recipe name<input id="rf-name" value="${esc(r.name||'')}"></label><label>Category<select id="rf-cat">${['Appetizer','Main','Side','Dessert','Sauce','Drink'].map(c=>`<option ${r.category===c?'selected':''}>${c}</option>`).join('')}</select></label><div class="two-col"><label>Servings<input id="rf-serv" type="number" step="0.5" value="${r.defaultServings||1}"></label><label>Cook time<input id="rf-time" value="${esc(r.cookTime||'')}"></label></div><label>Original recipe URL<input id="rf-url" value="${esc(r.originalUrl||'')}"></label><div class="section-head"><h3>Ingredients</h3><button class="link" onclick="addRecipeIngredient()">+ Add ingredient</button></div><div id="rf-ingredients">${(r.ingredients||[]).map(i=>recipeIngredientEditor({name:i[2],qty:i[1],category:i[3]})).join('')}</div><button class="btn btn-primary" onclick="saveRecipeForm()">Save Recipe</button></div>`}
+function allGroceryGroups(){
+ const groups=groceryGroups.map(g=>[g[0],g[1].slice()]);
+ 
+ state.customIngredients.forEach(x=>{
+  let g=groups.find(g=>g[0]===x.category);
+  if(!g){g=[x.category,[]];groups.push(g)}
+  g[1].push([x.id,x.name,x.qty,`Custom ingredient`]);
+ });
+ return groups;
+}
+function groceryProgress(){
+ const items=allGroceryGroups().flatMap(g=>g[1]); const done=items.filter(x=>state.purchased[x[0]]).length; return [done,items.length];
+}
+function grocery(){
+ const groups=allGroceryGroups();
+ const body=groups.map(g=>{
+  const rows=g[1].map(x=>{
+   const done=!!state.purchased[x[0]];
+   return `<div class="grocery-row checkable-row ${done?'done':''}" onclick="toggleGrocery('${x[0]}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleGrocery('${x[0]}')}"><div class="grocery-top"><button class="check ${done?'done':''}" onclick="event.stopPropagation()"></button><div class="grocery-name">${esc(x[1])}</div><div class="grocery-qty">${esc(x[2])}</div></div><div class="grocery-bottom">${sourceLines(x[0])||'Custom ingredient'}</div></div>`;
+  }).join('');
+  return `<div class="grocery-group"><h3>${esc(g[0])}</h3><div class="card">${rows}</div></div>`;
+ }).join('');
+ return `<div class="toolbar"><div class="pill">${groceryProgress()[0]} of ${groceryProgress()[1]} purchased</div><button class="btn btn-secondary" onclick="openGroceryAdjust()">Adjust quantities</button></div>${body}`;
+}
+function sourceLines(id){
+ const custom=state.customIngredients.find(x=>x.id===id); if(custom) return `<div>Custom ingredient</div>`;
+ const map={
+  tomatoes:["Ratatouille: 3"],eggplant:["Ratatouille: 1.5 (buy 2)"],zucchini:["Ratatouille: 1.5 (buy 2)"],onion:["Ratatouille: ¾"],bell:["Ratatouille: ¾"],
+  garlic:["Apple Cider Chicken Thighs: 4 cloves","Ratatouille: 4.5–6 pieces"],rosemary:["Apple Cider Chicken Thighs: 2 tsp"],blueberries:["Blueberry Roll Cake Cheesecake: 280 g"],lemon:["Blueberry Roll Cake Cheesecake: 10 g + 5 g"],
+  beef:["Maple Syrup Braised Beef: 1.8 kg"],chicken:["Apple Cider Chicken Thighs: 8"],"cream-cheese":["Blueberry Roll Cake Cheesecake: 200 g"],whipping:["Blueberry Roll Cake Cheesecake: 130 g","Blueberry Roll Cake Cheesecake: 120 g"],yogurt:["Blueberry Roll Cake Cheesecake: 40 g"],milk:["Blueberry Roll Cake Cheesecake: 45 g"],eggs:["Blueberry Roll Cake Cheesecake: 3 yolks + 3 whites"],
+  maple:["Maple Syrup Braised Beef: 10.5–12 tbsp"],balsamic:["Maple Syrup Braised Beef: 9 tbsp"],cider:["Apple Cider Chicken Thighs: 2 cups"],dijon:["Apple Cider Chicken Thighs: 2 tbsp"],"olive-oil":["Apple Cider Chicken Thighs: 2 tbsp","Ratatouille: as needed"],canned:["Ratatouille: 450 g"],basil:["Ratatouille: 3 g"],
+  sugar:["Blueberry Roll Cake Cheesecake: 163 g total"],flour:["Blueberry Roll Cake Cheesecake: 45 g"],cornstarch:["Blueberry Roll Cake Cheesecake: 3 g"],gelatin:["Blueberry Roll Cake Cheesecake: 6 g + 5 g"],vanilla:["Blueberry Roll Cake Cheesecake: 3 g"],"vegetable-oil":["Blueberry Roll Cake Cheesecake: 23 g"],salt:["Maple Syrup Braised Beef: 1.5 tsp","Apple Cider Chicken Thighs: as needed","Ratatouille: as needed"],"black-pepper":["Maple Syrup Braised Beef: 1.5 tsp","Apple Cider Chicken Thighs: as needed","Ratatouille: as needed"]
+ };
+ return (map[id]||[]).map(x=>`<div>${esc(x)}</div>`).join("");
+}
+function openGroceryAdjust(){state.page="groceryEdit";save();render();window.scrollTo({top:0,behavior:"smooth"})}
+function groceryEdit(){
+ const groups=allGroceryGroups(); const categories=[...new Set([...groceryGroups.map(g=>g[0]),...state.customCategories])];
+ return `<button class="back" onclick="go('grocery')">← Back to grocery</button>
+ <div class="recipe-head"><div class="eyebrow">Customize</div><h1>Adjust quantities</h1><div class="date">Edit required quantities, what you already have, or add ingredients.</div></div>
+ <div class="card grocery-edit-card">${groups.map(g=>`<div class="ingredient-section"><h3>${esc(g[0])}</h3>${g[1].map(x=>`<div class="grocery-edit-row"><div class="grocery-edit-name"><div>${esc(x[1])}</div></div><input class="grocery-edit-input" value="${esc(x[2])}" aria-label="Required quantity for ${esc(x[1])}" onchange="setRequired('${x[0]}',this.value)"><input class="grocery-edit-input" inputmode="decimal" value="${esc(state.have[x[0]]||'')}" placeholder="Already have" aria-label="Already have ${esc(x[1])}" onchange="setHave('${x[0]}',this.value)">${state.customIngredients.some(c=>c.id===x[0])?`<button class="btn btn-secondary" onclick="removeCustomIngredient('${x[0]}')">Remove</button>`:''}</div>`).join('')}</div>`).join('')}</div>
+ <div class="section"><div class="card grocery-add-card"><div class="section-head"><h2>Add ingredient</h2></div><div class="grocery-add-grid"><input id="newIngName" placeholder="Ingredient name"><input id="newIngQty" placeholder="Required quantity"><select id="newIngCategory" onchange="toggleNewCategory(this.value)"><option value="">Choose category</option>${categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}<option value="__custom">+ Create new category</option></select><input id="newIngCustomCategory" class="hidden" placeholder="New category name"><button class="btn btn-primary" onclick="addCustomIngredient()">Add ingredient</button></div><div class="grocery-custom-note">Choose an existing category or create your own.</div></div></div>
+ <div class="grocery-edit-actions"><button class="btn btn-secondary" onclick="go('grocery')">Cancel</button><button class="btn btn-primary" onclick="go('grocery')">Done</button></div>`;
+}
+function setRequired(id,v){
+ const custom=state.customIngredients.find(x=>x.id===id);
+ if(custom) custom.qty=v;
+ else { for(const g of groceryGroups){const item=g[1].find(x=>x[0]===id); if(item){item[2]=v;break}} }
+ save();
+}
+function toggleNewCategory(value){const el=document.getElementById("newIngCustomCategory"); if(el) el.classList.toggle("hidden",value!=="__custom")}
+function addCustomIngredient(){
+ const name=document.getElementById('newIngName').value.trim(), qty=document.getElementById('newIngQty').value.trim(), sel=document.getElementById('newIngCategory').value;
+ let category=sel; if(sel==='__custom') category=document.getElementById('newIngCustomCategory').value.trim();
+ if(!name||!qty||!category){toast('Please enter name, quantity, and category');return}
+ if(sel==='__custom'&&!state.customCategories.includes(category)) state.customCategories.push(category);
+ const id='custom:'+Date.now(); state.customIngredients.push({id,name,qty,category}); save(); render(); toast('Ingredient added');
+}
+function removeCustomIngredient(id){state.customIngredients=state.customIngredients.filter(x=>x.id!==id);delete state.have[id];delete state.purchased[id];save();render();}
+function toggleGrocery(id){state.purchased[id]=!state.purchased[id];save();render()}
+function setHave(id,v){state.have[id]=v;save()}
+function resetGrocery(){state.purchased={};save();render();toast("Grocery checklist reset")}
+const defaultPlan=[
+ {day:"Wednesday · Sep 9",label:"Grocery + setup",items:[
+  {time:"",text:"Grocery shopping",recipe:"General",id:"personal:0"},{time:"",text:"Check ingredients",recipe:"General",id:"personal:1"},{time:"",text:"Organize fridge",recipe:"General",id:"personal:2"},{time:"",text:"Prepare / confirm cookware and serving dishes",recipe:"General",id:"personal:3"}]},
+ {day:"Thursday · Sep 10",label:"Make-ahead prep",items:[
+  {time:"",text:"Make blueberry puree → cool → refrigerate",recipe:"Blueberry Roll Cake Cheesecake",id:"step:cheesecake:0",rid:"cheesecake"},{time:"",text:"Make ratatouille tomato sauce → cool → refrigerate",recipe:"Ratatouille",id:"step:ratatouille:0",rid:"ratatouille"},{time:"",text:"Trim chicken, prep garlic & rosemary, mix glaze, season chicken",recipe:"Apple Cider Glazed Chicken Thighs",id:"step:chicken:0",rid:"chicken"}]},
+ {day:"Friday · Sep 11",label:"Cook + assemble ahead",items:[
+  {time:"",text:"Complete Blueberry Roll Cake Cheesecake → refrigerate",recipe:"Blueberry Roll Cake Cheesecake",id:"step:cheesecake:1",rid:"cheesecake"},{time:"",text:"Cook Maple Syrup Braised Beef → cool → refrigerate",recipe:"Maple Syrup Braised Beef",id:"step:beef:0",rid:"beef"},{time:"",text:"Organize serving dishes and kitchen",recipe:"General",id:"personal:5"},{time:"",text:"Set up anything that can be done ahead",recipe:"General",id:"personal:6"}]},
+ {day:"Saturday · Sep 12",label:"Birthday",items:[
+  {time:"1:30 PM",text:"Start slowly reheating Maple Beef",recipe:"Maple Syrup Braised Beef",id:"step:beef:7",rid:"beef"},{time:"2:00 PM",text:"Slice vegetables + assemble ratatouille",recipe:"Ratatouille",id:"step:ratatouille:5",rid:"ratatouille"},{time:"2:15 PM",text:"Bake ratatouille: 150°C covered 30 min → 200°C uncovered 15 min",recipe:"Ratatouille",id:"step:ratatouille:9",rid:"ratatouille"},{time:"2:45 PM",text:"Start cooking chicken",recipe:"Apple Cider Glazed Chicken Thighs",id:"step:chicken:1",rid:"chicken"},{time:"3:15–3:45 PM",text:"Finish chicken, ratatouille, transfer dishes, keep warm",recipe:"Final cooking",id:""},{time:"3:45–4:15 PM",text:"Final buffet setup + cheesecake finish + table/lighting/music",recipe:"Hosting",id:"personal:8"},{time:"4:15 PM",text:"Cooking finished · 45 minutes until guests",recipe:"Hosting",id:""},{time:"5:00 PM",text:"Guests arrive 🎉",recipe:"Hosting",id:""}] }
+];
+function getPlan(){return state.planData||defaultPlan}
+function recipeIdFromName(name){return Object.entries(recipes).find(([,r])=>r.name===name)?.[0]||null}
+function plan(){
+ const days=getPlan();
+ return `<div class="toolbar"><div></div><button class="btn btn-secondary" onclick="openPlanEdit()">Edit plan</button></div>`+days.map(d=>`<div class="timeline-day"><div class="day-title"><h2>${esc(d.day)}</h2><span>${esc(d.label)}</span></div><div class="card">${d.items.map(i=>{const rid=i.rid||recipeIdFromName(i.recipe);const checked=i.id&&isChecked(i.id);return `<div class="plan-timeline-item checkable-row ${!rid?'single-line':''}" ${i.id?`onclick="toggle('${i.id}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle('${i.id}')}"`:''}>${i.id?`<button class="check ${checked?'done':''}" onclick="event.stopPropagation()"></button>`:''}<div class="plan-timeline-main"><div class="timeline-title ${checked?'done':''}">${esc(i.text)}</div>${rid?`<button class="timeline-sub recipe-link" onclick="event.stopPropagation();openRecipe('${rid}')">${esc(i.recipe)} →</button>`:i.recipe&&i.recipe!=="General"?`<div class="timeline-sub">${esc(i.recipe)}</div>`:''}</div>${i.time?`<div class="plan-timeline-time">${esc(i.time)}</div>`:''}</div>`}).join("")}</div></div>`).join("");
+}
+function planEdit(){
+ const days=getPlan();
+ return `<button class="back" onclick="go('plan')">← Back to plan</button><div class="recipe-head"><div class="eyebrow">Customize</div><h1>Edit Plan</h1><div class="date">Adjust days, times, task wording, or add/remove hosting tasks.</div></div>${days.map((d,di)=>`<div class="section"><div class="section-head"><h2>${esc(d.day)}</h2><span>${esc(d.label)}</span></div><div class="card" style="padding:0 16px"><div class="plan-edit-fields" style="padding:14px 0 4px"><input value="${esc(d.day)}" placeholder="Date / day" onchange="updatePlanDay(${di},'day',this.value)"><input value="${esc(d.label)}" placeholder="Day label" onchange="updatePlanDay(${di},'label',this.value)"></div>${d.items.map((i,ii)=>`<div class="plan-edit-row"><div class="plan-edit-fields"><input value="${esc(i.time||'')}" placeholder="Time (optional)" onchange="updatePlanItem(${di},${ii},'time',this.value)"><input value="${esc(i.text)}" placeholder="Task" onchange="updatePlanItem(${di},${ii},'text',this.value)"></div><div class="plan-edit-actions"><button style="background:#eee7df" onclick="removePlanItem(${di},${ii})">Remove</button></div></div>`).join('')}<button class="btn btn-secondary" style="margin:12px 0 16px" onclick="addPlanItem(${di})">+ Add task</button></div></div>`).join('')}<div class="section"><button class="btn btn-secondary" onclick="addPlanDay()">+ Add date / day</button></div><div class="section"><button class="btn btn-primary" onclick="go('plan')">Done</button></div>`;
+}
+function updatePlanDay(di,key,value){const p=getPlan();p[di][key]=value;state.planData=p;save();render()}
+function updatePlanItem(di,ii,key,value){const p=getPlan();p[di].items[ii][key]=value;state.planData=p;save()}
+function removePlanItem(di,ii){const p=getPlan();p[di].items.splice(ii,1);state.planData=p;save();render()}
+function addPlanItem(di){const p=getPlan();p[di].items.push({time:"",text:"New hosting task",recipe:"Hosting",id:""});state.planData=p;save();render()}
+function addPlanDay(){const p=getPlan();p.push({day:"New date / day",label:"Hosting",items:[]});state.planData=p;save();render()}
+function defaultCookTimeline(){
+ return [
+  {time:"1:30 PM",description:"Slowly reheat until hot.",recipeId:"beef",id:"step:beef:7"},
+  {time:"2:00 PM",description:"Slice vegetables + assemble.",recipeId:"ratatouille",id:"step:ratatouille:5"},
+  {time:"2:15 PM",description:"Bake covered 30 min → uncovered 15 min.",recipeId:"ratatouille",id:"step:ratatouille:9"},
+  {time:"2:45 PM",description:"Start cooking; finish close to serving.",recipeId:"chicken",id:"step:chicken:1"},
+  {time:"3:15 PM",description:"Finish chicken and glaze.",recipeId:"chicken",id:"step:chicken:4"},
+  {time:"3:30 PM",description:"Finish with black pepper and transfer.",recipeId:"ratatouille",id:"step:ratatouille:11"},
+  {time:"3:45 PM",description:"Finish, slice, and put dessert out.",recipeId:"cheesecake",id:"personal:9"},
+  {time:"3:45 PM",description:"Buffet, table, lighting, music.",recipeId:"",id:"personal:8"}
+ ];
+}
+function getCookTimeline(){return state.cookTimeline||defaultCookTimeline()}
+function cook(){
+ const active=getCookTimeline();
+ return `<div class="cook-hero card"><div class="eyebrow">Cooking dashboard</div><div class="hero-grid"><div><h1>Birthday Dinner</h1><div class="date">Saturday · Guests arrive at 5:00 PM</div></div></div><div class="cook-summary">Everything you are responsible for, in one live timeline.</div></div>
+ <div class="toolbar"><div></div><button class="btn btn-secondary" onclick="openCookEdit()">Edit cooking timeline</button></div>
+ <div class="section"><div class="section-head"><h2>Cooking timeline</h2></div>
+ <div class="card cook-list">${active.map(i=>{const checked=isChecked(i.id),r=recipes[i.recipeId];return `<div class="timeline-item checkable-row" onclick="toggle('${i.id}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle('${i.id}')}"><button class="check cook-check ${checked?'done':''}" onclick="event.stopPropagation()"></button><div class="timeline-content"><div class="cook-description ${checked?'done':''}">${esc(i.description)}</div>${r?`<button class="cook-dish-link cook-dish" onclick="event.stopPropagation();openRecipe('${i.recipeId}')">${esc(r.name)} →</button>`:`<div class="cook-dish">Hosting</div>`}</div><div class="cook-time">${esc(i.time||'')}</div></div>`}).join("")}</div></div>
+ <div class="section"><div class="note">Shannon + Elvin's dishes are intentionally not included in this cooking dashboard. They are shown on the Home menu only.</div></div>`;
+}
+function openCookEdit(){state.page="cookEdit";save();render();window.scrollTo({top:0,behavior:"smooth"})}
+function cookEdit(){
+ const items=getCookTimeline();
+ return `<button class="back" onclick="go('cook')">← Back to cook</button><div class="recipe-head"><div class="eyebrow">Customize</div><h1>Edit Cooking Timeline</h1><div class="date">Change timing, descriptions, connected recipes, or add new cooking tasks.</div></div><div class="card" style="padding:0 16px">${items.map((i,ii)=>`<div class="cook-edit-row"><input value="${esc(i.time||'')}" placeholder="Time (optional)" onchange="updateCookItem(${ii},'time',this.value)"><input value="${esc(i.description||'')}" placeholder="What needs to be done" onchange="updateCookItem(${ii},'description',this.value)"><select onchange="updateCookItem(${ii},'recipeId',this.value)"><option value="">No connected recipe</option>${Object.entries(recipes).map(([rid,r])=>`<option value="${rid}" ${i.recipeId===rid?'selected':''}>${esc(r.name)}</option>`).join('')}</select><div class="cook-edit-actions"><button style="border:0;border-radius:9px;padding:7px 9px;background:#eee7df" onclick="removeCookItem(${ii})">Remove</button></div></div>`).join('')}<button class="btn btn-secondary" style="margin:12px 0 16px" onclick="addCookItem()">+ Add to-do</button></div><div class="section"><button class="btn btn-primary" onclick="go('cook')">Done</button></div>`;
+}
+function updateCookItem(ii,key,value){const p=getCookTimeline().slice();p[ii][key]=value;state.cookTimeline=p;save()}
+function removeCookItem(ii){const p=getCookTimeline().slice();p.splice(ii,1);state.cookTimeline=p;save();render()}
+function addCookItem(){const p=getCookTimeline().slice();p.push({time:"",description:"New cooking task",recipeId:"",id:"cook:"+Date.now()});state.cookTimeline=p;save();render()}
+function recipesPage(){
+ const cats=['Appetizer','Main','Side','Dessert','Sauce','Drink'];const all=allRecipes();
+ return `<div class="toolbar"><div></div></div>`+cats.map(cat=>{const items=Object.entries(all).filter(([id,r])=>r.category===cat);if(!items.length)return '';return `<div class="section"><div class="section-head"><h2>${cat}</h2></div><div class="recipe-list">${items.map(([id,r])=>`<div class="card recipe-card"><span class="icon">${r.icon||'🍽️'}</span><button class="recipe-card-body recipe-link" onclick="openRecipe('${id}')"><span class="recipe-card-title">${esc(r.name)}</span><span class="recipe-card-meta">${r.category} · ${r.defaultServings} servings · ${esc(r.cookTime||'—')}</span></button><span class="chev">›</span></div>`).join('')}</div></div>`}).join('');
+}
+function recipePage(id){
+ const r=recipes[id]; r.id=id; const serving=state.serving[id];
+ return `<button class="back" onclick="go('recipes')">← All recipes</button>
+ <div class="recipe-head"><div class="eyebrow">${r.category}</div><h1>${esc(r.name)}</h1><div class="date">${r.category} · ${id==="cheesecake"?"8 servings":serving+" servings"} · ${esc(r.cookTime||'—')}</div><div class="recipe-actions"><a class="btn btn-secondary" href="${r.originalUrl}" target="_blank" rel="noopener">${esc(r.originalLabel||'View original recipe')} ↗</a><div class="scale"><button onclick="changeServing('${id}',-1)">−</button><span class="scale-value">${id==="cheesecake"?"Original":serving+" servings"}</span><button onclick="changeServing('${id}',1)" ${id==="cheesecake"?'disabled':''}>+</button></div><button class="btn btn-secondary" onclick="resetRecipe('${id}')">Reset recipe</button></div></div>
+ <div class="tabs">${["ingredients","instructions","plan"].map(t=>`<button class="${state.recipeTab===t?'active':''}" onclick="recipeTab('${t}')">${t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div>
+ ${state.recipeTab==="ingredients"?recipeIngredients(r,serving):state.recipeTab==="instructions"?recipeInstructions(r,serving):recipePlan(r)}
+ `;
+}
+function recipeIngredients(r,serving){
+ const groups={};
+ r.ingredients.forEach(i=>(groups[i[3]]??=[]).push(i));
+ const names={protein:"Protein",produce:"Produce",dairy:"Dairy & chilled",pantry:"Pantry & baking",drinks:"Drinks",baking:"Baking"};
+ return `<div class="card">${Object.entries(groups).map(([g,items])=>`<div class="ingredient-section"><h3>${names[g]||g}</h3>${items.map(i=>{const iid='ing:'+r.id+':'+i[0],done=isChecked(iid);return `<div class="ing-row checkable-row" onclick="toggle('${iid}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle('${iid}')}" ><button class="check ${done?'done':''}" onclick="event.stopPropagation()"></button><div class="ing-qty">${esc(ingredientDisplay(r,i[0],serving))}</div><div class="ing-name">${esc(i[2])}</div></div>`}).join("")}</div>`).join("")}</div>
+ ${r.note?`<div class="section"><div class="note">${esc(r.note)}</div></div>`:""}`;
+}
+function recipeInstructions(r,serving){
+ return `<div class="card">${r.steps.map((s,i)=>{const id=`step:${r.id}:${i}`,done=isChecked(id);return `<div class="instruction checkable-row" onclick="toggle('${id}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle('${id}')}"><div class="instruction-head"><div class="step-num">${i+1}</div><div class="instruction-text ${done?'done':''}">${esc(stepText(r,s[0]))}</div><button class="check ${done?'done':''}" onclick="event.stopPropagation()"></button></div></div>`}).join("")}</div>`;
+}
+function recipePlan(r){
+ return `<div class="card plan-block">${r.plan.map(p=>`<div class="plan-row"><div class="plan-date">${esc(p[0])}</div><div class="plan-main"><strong>${esc(p[1])}</strong><div>${esc(p[2])}</div></div></div>`).join("")}</div>`;
+}
+function recipeTab(t){state.recipeTab=t;save();render()}
+function changeServing(id,delta){
+ if(id==="cheesecake") return;
+ const r=recipes[id], current=state.serving[id];
+ const next=Math.max(1,Math.round((current+delta)*2)/2); state.serving[id]=next;save();render();toast(`Scaled to ${next} servings`)
+}
+function resetRecipe(id){
+ Object.keys(state.checks).filter(k=>k.startsWith(`step:${id}:`)||k.startsWith(`ing:${id}:`)).forEach(k=>delete state.checks[k]);
+ save();render();toast("Recipe checklist reset")
+}
+render();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>
