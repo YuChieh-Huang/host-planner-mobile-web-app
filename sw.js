@@ -1,4 +1,4 @@
-const CACHE_NAME = 'table-birthday-v16';
+const CACHE_NAME = 'table-birthday-v18';
 const APP_SHELL = [
   './',
   './index.html',

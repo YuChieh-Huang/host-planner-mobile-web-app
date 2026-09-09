@@ -841,11 +841,12 @@ function recipeTab(t){state.recipeTab=t;save();render()}
 function changeServing(id,delta){
  if(id==="cheesecake") return;
  const r=recipes[id], current=state.serving[id];
- const next=Math.max(1,Math.round((current+delta)*2)/2); state.serving[id]=next;save();render();toast(`Scaled to ${next} servings`)
+ const next=Math.max(1,Math.round((current+delta*0.5)*2)/2); state.serving[id]=next;save();render();toast(`Scaled to ${next} servings`)
 }
 function resetRecipe(id){
  Object.keys(state.checks).filter(k=>k.startsWith(`step:${id}:`)||k.startsWith(`ing:${id}:`)).forEach(k=>delete state.checks[k]);
- save();render();toast("Recipe checklist reset")
+ if(recipes[id]) state.serving[id]=recipes[id].defaultServings;
+ save();render();toast("Recipe reset to default")
 }
 render();
 </script>
