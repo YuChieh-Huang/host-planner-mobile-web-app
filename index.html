@@ -117,6 +117,7 @@ p{line-height:1.5}
 .scale button{width:30px;height:30px;border:1px solid var(--line);background:var(--surface);border-radius:9px}
 .scale-value{min-width:58px;text-align:center;font-weight:700;font-size:13px}
 .note{font-size:12px;color:var(--muted);background:#f3eee8;border-radius:14px;padding:12px 13px;line-height:1.45}
+.instruction-section-heading{padding:20px 18px 8px;border-top:1px solid var(--line)}.instruction-section-heading:first-child{border-top:0;padding-top:8px}.instruction-section-heading h3{margin:0;font-size:18px;letter-spacing:-.02em}
 .instruction{padding:17px 16px;border-bottom:1px solid var(--line)}
 .instruction:last-child{border-bottom:0}
 .instruction-head{display:flex;gap:10px;align-items:flex-start}
@@ -260,7 +261,6 @@ p{line-height:1.5}
       </div>
       
     </div>
-    <div class="count">9 confirmed guests: Ted, Judy, Charlene, Shannon, Elvin, Kaylee, Daniel, Roy, Ryan<br>Maybe: Alex, Morgan</div>
   </div>
 
   <div class="section">
@@ -298,11 +298,11 @@ const EVENT = {
 };
 
 const menu = [
- {id:"salad",icon:"🥗",name:"Apple Salad",category:"Appetizer",owner:"Shannon",managed:false},
- {id:"corn",icon:"🌽",name:"Mexican Grilled Corn",category:"Appetizer",owner:"Elvin",managed:false},
+ {id:"salad",icon:"🥗",name:"Apple Salad",category:"Side",owner:"Shannon",managed:false},
+ {id:"corn",icon:"🌽",name:"Mexican Grilled Corn",category:"Side",owner:"Elvin",managed:false},
  {id:"beef",icon:"🥩",name:"Maple Syrup Braised Beef",category:"Main",owner:"Judy",managed:true},
  {id:"chicken",icon:"🍎",name:"Apple Cider Glazed Chicken Thighs",category:"Main",owner:"Judy",managed:true},
- {id:"pasta",icon:"🌶️",name:"Creamy Slightly Spicy Pasta",category:"Main",owner:"Shannon + Elvin",managed:false},
+ {id:"pasta",icon:"🌶️",name:"Creamy Slightly Spicy Pasta",category:"Side",owner:"Shannon + Elvin",managed:false},
  {id:"ratatouille",icon:"🍅",name:"Ratatouille",category:"Side",owner:"Judy",managed:true},
  {id:"cheesecake",icon:"🫐",name:"Blueberry Roll Cake Cheesecake",category:"Dessert",owner:"Judy",managed:true},
  {id:"drink",icon:"🫖",name:"Fruit Tea / Caffeine-Free Drink",category:"Drink",owner:"Shannon + Elvin",managed:false}
@@ -310,20 +310,21 @@ const menu = [
 
 const recipes = {
  beef:{
-  name:"Maple Syrup Braised Beef", icon:"🥩", category:"Main", base:10.5, defaultServings:10.5, cookTime:"2.5–3 hr", originalUrl:"https://www.instagram.com/reel/DaApAf2Ac4i/?stkn=dXVveGFxNmd2MjR2", originalLabel:"View original on Instagram",
+  name:"Maple Syrup Braised Beef", icon:"🥩", category:"Main", base:9, defaultServings:9, servingLabel:"8–10 servings", cookTime:"2.5–3 hr", originalUrl:"https://www.instagram.com/reel/DaApAf2Ac4i/?stkn=dXVveGFxNmd2MjR2", originalLabel:"View original on Instagram",
   ingredients:[
-   ["beef","1.8 kg","Beef short ribs, cut into chunks","protein"],
-   ["maple","10.5–12 tbsp","Maple syrup","pantry"],
-   ["balsamic","9 tbsp","Balsamic vinegar","pantry"],
-   ["salt","1.5 tsp","Salt","pantry"],
-   ["pepper","1.5 tsp","Black pepper","pantry"],
+   ["beef-finger","1.0 kg","Beef finger meat","protein"],
+   ["beef-lean","500 g","Leaner stew beef","protein"],
+   ["maple","8.75–10 tbsp","Maple syrup","pantry"],
+   ["balsamic","7.5 tbsp","Balsamic vinegar","pantry"],
+   ["salt","1.25 tsp","Salt","pantry"],
+   ["pepper","1.25 tsp","Black pepper","pantry"],
    ["water","as needed","Water","pantry"]
   ],
   steps:[
-   ["Sear 1.8 kg beef in batches until well browned.","2"],
-   ["Add 10.5–12 tbsp maple syrup + 9 tbsp balsamic vinegar and toss quickly.","2"],
+   ["Sear 1.5 kg beef in batches until well browned.","2"],
+   ["Add 8.75–10 tbsp maple syrup + 7.5 tbsp balsamic vinegar and toss quickly.","2"],
    ["Add enough water to come just below the beef.","2"],
-   ["Add 1.5 tsp salt + 1.5 tsp black pepper.","2"],
+   ["Add 1.25 tsp salt + 1.25 tsp black pepper.","2"],
    ["Cover and braise for 2.5–3 hours until tender.","2"],
    ["Uncover and reduce sauce for 5–10 min.","2"],
    ["Cool and refrigerate overnight.","2"],
@@ -332,55 +333,55 @@ const recipes = {
   plan:[
    ["Fri","Cook","Cook → cool → refrigerate","Friday"],
    ["Sat","1:30 PM","Slowly reheat","Saturday"]
-  ]
- },
- chicken:{
-  name:"Apple Cider Glazed Chicken Thighs", icon:"🍎", category:"Main", base:8, defaultServings:8, cookTime:"20–25 min", originalUrl:"https://www.instagram.com/p/DPkOCNXAbsC/?stkn=cHNvcHE5YjVrczdw", originalLabel:"View original on Instagram",
+  ],
+  note:"Target: 1.5 kg total beef for 11 guests. Use about 1.0 kg beef finger meat + 500 g leaner stew beef. This is the main/star protein alongside one chicken thigh per guest."
+ }, chicken:{
+  name:"Apple Cider Glazed Chicken Thighs", icon:"🍎", category:"Main", base:11, defaultServings:11, servingLabel:"11 servings", cookTime:"20–25 min", originalUrl:"https://www.instagram.com/p/DPkOCNXAbsC/?stkn=cHNvcHE5YjVrczdw", originalLabel:"View original on Instagram",
   ingredients:[
-   ["chicken","8","Chicken thighs","protein"],
-   ["cider","2 cups / 475 mL","Apple cider","drinks"],
-   ["dijon","2 tbsp","Dijon mustard","pantry"],
-   ["garlic-chicken","4 cloves","Garlic, minced","produce"],
-   ["oil-chicken","2 tbsp","Olive oil","pantry"],
-   ["rosemary","2 tsp","Fresh rosemary, chopped","produce"],
-   ["salt-chicken","as needed","Salt","pantry"],
+   ["chicken","11","Boneless, skin-on chicken thighs","protein"],
+   ["cider","2.75 cups","Apple cider","drinks"],
+   ["dijon","2.75 tbsp","Dijon mustard","pantry"],
+   ["oil-chicken","2.75 tbsp","Olive oil","pantry"],
+   ["rosemary","2.75 tsp","Fresh rosemary, chopped","produce"],
+   ["butter","1.5 tbsp","Butter","dairy"],
+   ["salt-chicken","as needed","Sea salt","pantry"],
    ["pepper-chicken","as needed","Black pepper","pantry"]
   ],
   steps:[
-   ["Season 8 chicken thighs with salt and pepper.","2"],
-   ["Heat 2 tbsp olive oil and sear chicken for 4–5 min per side.","2"],
-   ["Whisk together 2 cups apple cider + 2 tbsp Dijon + 4 cloves garlic + 2 tsp rosemary.","2"],
-   ["Pour mixture into skillet.","2"],
-   ["Reduce heat and simmer 10–12 min, until chicken is cooked and sauce thickens.","2"],
-   ["Spoon glaze over chicken before serving.","2"]
+   ["Season 11 chicken thighs with sea salt and black pepper.","2"],
+   ["Heat 2.75 tbsp olive oil and sear chicken until browned and cooked through.","2"],
+   ["Whisk together 2.75 cups apple cider + 2.75 tbsp Dijon + 2.75 tsp rosemary.","2"],
+   ["Pour mixture into skillet and reduce until the glaze thickens.","2"],
+   ["Add about 1.5 tbsp butter to finish the glaze.","2"],
+   ["Spoon glaze over the chicken before serving.","2"]
   ],
   plan:[
-   ["Thu","Prep","Trim chicken; mince garlic; chop rosemary; mix cider + Dijon + garlic + rosemary; season chicken","Thursday"],
+   ["Thu","Prep","Trim chicken; chop rosemary; mix cider + Dijon + rosemary; season chicken","Thursday"],
    ["Sat","2:45 PM","Cook as close to serving as practical","Saturday"]
-  ]
- },
- ratatouille:{
-  name:"Ratatouille", icon:"🍅", category:"Side", base:10.5, defaultServings:10.5, cookTime:"45 min", originalUrl:"https://www.instagram.com/reel/DahaXolu60N/?stkn=dHhxbnZ1bjl6d3U=", originalLabel:"View original on Instagram",
+  ],
+  note:"Target: 1 whole boneless, skin-on thigh per guest (11 total)."
+ }, ratatouille:{
+  name:"Ratatouille", icon:"🍅", category:"Side", base:6, defaultServings:6, cookTime:"45 min", originalUrl:"https://www.instagram.com/reel/DahaXolu60N/?stkn=dHhxbnZ1bjl6d3U=", originalLabel:"View original on Instagram",
   ingredients:[
-   ["tomatoes","3","Tomatoes","produce"],
-   ["eggplant","1.5","Eggplant","produce"],
-   ["zucchini","1.5","Zucchini","produce"],
-   ["onion","0.75","White onion","produce"],
-   ["pepper-rat","0.75","Bell pepper","produce"],
-   ["garlic-rat","4.5–6","Single-clove garlic pieces","produce"],
-   ["basil","3 g","Dried basil","pantry"],
-   ["canned-tomatoes","450 g","Canned tomatoes","pantry"],
+   ["tomatoes","2","Tomatoes","produce"],
+   ["eggplant","1","Eggplant","produce"],
+   ["zucchini","1","Zucchini","produce"],
+   ["onion","0.5","White onion","produce"],
+   ["pepper-rat","0.5","Red pepper","produce"],
+   ["garlic-rat","3–4","Garlic cloves","produce"],
+   ["thyme","2 g","Thyme","produce"],
+   ["canned-tomatoes","300 g","Canned tomatoes","pantry"],
    ["oil-rat","as needed","Olive oil","pantry"],
-   ["salt-rat","as needed","Salt","pantry"],
+   ["salt-rat","as needed","Sea salt","pantry"],
    ["pepper-rat","as needed","Black pepper","pantry"]
   ],
   steps:[
-   ["Chop ¾ onion + ¾ bell pepper + 4.5–6 garlic pieces.","1"],
+   ["Chop ½ onion + ½ red pepper + 3–4 garlic cloves.","1"],
    ["Sauté onion in olive oil until softened.","1"],
-   ["Add garlic, then bell pepper.","1"],
-   ["Add 450 g canned tomatoes + 3 g dried basil + salt. Cover and simmer 15 min.","1"],
+   ["Add garlic, then red pepper.","1"],
+   ["Add 300 g canned tomatoes + 2 g thyme + salt. Cover and simmer 15 min.","1"],
    ["Blend until smooth and adjust seasoning. Cool and refrigerate.","1"],
-   ["Saturday: slice 3 tomatoes + 1.5 eggplants + 1.5 zucchini.","2"],
+   ["Saturday: slice 2 tomatoes + 1 eggplant + 1 zucchini.","2"],
    ["Spread the prepared tomato sauce into the baking dish.","2"],
    ["Arrange the freshly sliced vegetables.","2"],
    ["Brush with olive oil and season with salt.","2"],
@@ -392,50 +393,79 @@ const recipes = {
    ["Thu","Prep","Make tomato sauce → cool → refrigerate. Do not slice/arrange vegetables.","Thursday"],
    ["Sat","2:00 PM","Slice vegetables + assemble","Saturday"],
    ["Sat","2:15 PM","Bake: 150°C covered 30 min → 200°C uncovered 15 min","Saturday"]
-  ]
- },
- cheesecake:{
+  ],
+  note:"Target: about 6 normal side servings, shared across 11 guests. Keep this at the original recipe size rather than scaling it to 11 full servings."
+ }, cheesecake:{
   name:"Blueberry Roll Cake Cheesecake", icon:"🫐", category:"Dessert", base:8, defaultServings:8, cookTime:"—", originalUrl:"https://www.youtube.com/watch?v=aMMFvAj9WMo&list=PLBH9JSRhCJiQ&index=9", originalLabel:"View original on YouTube",
   ingredients:[
-   ["blueberries","280 g","Blueberries","produce"],
-   ["sugar-puree","70 g","Sugar — blueberry puree","pantry"],
-   ["lemon-puree","10 g","Lemon juice — puree","produce"],
-   ["yolks","3","Egg yolks","dairy"],
-   ["sugar-roll","15 g","Sugar — roll cake yolks","pantry"],
-   ["vanilla","3 g","Vanilla extract","pantry"],
-   ["milk","45 g","Milk","dairy"],
-   ["veg-oil","23 g","Vegetable oil","pantry"],
-   ["cake-flour","45 g","Cake flour","baking"],
-   ["cornstarch","3 g","Cornstarch","baking"],
-   ["whites","3","Egg whites","dairy"],
-   ["sugar-whites","45 g","Sugar — egg whites","pantry"],
-   ["cream-roll","130 g","Whipping cream — roll filling","dairy"],
-   ["sugar-fill","13 g","Sugar — roll filling","pantry"],
-   ["gelatin-cheese","6 g","Gelatin powder — cheesecake","baking"],
-   ["water-cheese","30 g","Water — cheesecake gelatin","pantry"],
-   ["cream-cheese","200 g","Cream cheese","dairy"],
-   ["sugar-cheese","20 g","Sugar — cheesecake","pantry"],
-   ["yogurt","40 g","Plain yogurt","dairy"],
-   ["puree-cheese","50 g","Blueberry puree — cheesecake","produce"],
-   ["lemon-cheese","5 g","Lemon juice — cheesecake","produce"],
-   ["cream-cheese-fill","120 g","Whipping cream — cheesecake","dairy"],
-   ["gelatin-jelly","5 g","Gelatin powder — jelly","baking"],
-   ["water-jelly","25 g","Water — jelly gelatin","pantry"],
-   ["puree-jelly","150 g","Blueberry puree — jelly","produce"],
-   ["water-jelly2","20 g","Water — jelly","pantry"]
+   ["blueberries","280 g","Blueberries","Blueberry Purée"],
+   ["sugar-puree","70 g","Sugar","Blueberry Purée"],
+   ["lemon-puree","10 g","Lemon juice","Blueberry Purée"],
+   ["yolks","3","Egg yolks","Roll Cake"],
+   ["sugar-roll","15 g","Sugar","Roll Cake"],
+   ["vanilla","3 g","Vanilla extract","Roll Cake"],
+   ["milk","45 g","Milk","Roll Cake"],
+   ["veg-oil","23 g","Vegetable oil","Roll Cake"],
+   ["cake-flour","45 g","Cake flour","Roll Cake"],
+   ["cornstarch","3 g","Cornstarch","Roll Cake"],
+   ["whites","3","Egg whites","Roll Cake"],
+   ["sugar-whites","45 g","Sugar","Roll Cake"],
+   ["cream-roll","130 g","Whipping cream","Whipping Cream Filling"],
+   ["sugar-fill","13 g","Sugar","Whipping Cream Filling"],
+   ["gelatin-cheese","6 g","Gelatin powder","Cheesecake"],
+   ["water-cheese","30 g","Water","Cheesecake"],
+   ["cream-cheese","200 g","Cream cheese","Cheesecake"],
+   ["sugar-cheese","20 g","Sugar","Cheesecake"],
+   ["yogurt","40 g","Plain yogurt","Cheesecake"],
+   ["puree-cheese","50 g","Blueberry purée","Cheesecake"],
+   ["lemon-cheese","5 g","Lemon juice","Cheesecake"],
+   ["cream-cheese-fill","120 g","Whipping cream","Cheesecake"],
+   ["gelatin-jelly","5 g","Gelatin powder","Blueberry Topping"],
+   ["water-jelly","25 g","Water","Blueberry Topping"],
+   ["puree-jelly","150 g","Blueberry purée","Blueberry Topping"],
+   ["water-jelly2","20 g","Water","Blueberry Topping"],
+   ["blueberries-garnish","As needed","Fresh blueberries — cake decoration","Blueberry Topping"],
+   ["mint","As needed","Mint leaves — cake decoration","Blueberry Topping"]
   ],
   steps:[
-   ["Thursday: make blueberry puree using 280 g blueberries + 70 g sugar + 10 g lemon juice. Cool completely and refrigerate.","1"],
-   ["Friday: bake roll cake.","2"],
-   ["Friday: make cream filling and roll cake.","2"],
-   ["Friday: make cheesecake layer with 6 g gelatin, 200 g cream cheese, 40 g yogurt, 50 g blueberry puree, 120 g whipping cream, and 20 g sugar.","2"],
-   ["Friday: make blueberry jelly with 5 g gelatin + 150 g blueberry puree.","2"],
-   ["Friday: refrigerate the completed cake until Saturday.","2"]
+   ["Preheat the oven to 200°C (392°F).","1","Setup"],
+   ["Cut the parchment paper to fit and lay it on top of the baking tray.","1","Setup"],
+   ["Blueberry Purée","heading",""],
+   ["Blend 280 g blueberries and transfer them to a saucepan.","1","Blueberry Purée"],
+   ["Add 70 g sugar and 10 g lemon juice, then bring to a boil over low heat.","1","Blueberry Purée"],
+   ["Continue stirring and cooking until the mixture becomes slightly thickened. Transfer to a bowl and cool in the refrigerator.","1","Blueberry Purée"],
+   ["Roll Cake","heading",""],
+   ["Add 15 g sugar and 3 g vanilla extract to 3 egg yolks and mix well.","2","Roll Cake"],
+   ["Add 23 g vegetable oil and 45 g milk, then mix until combined.","2","Roll Cake"],
+   ["Add 45 g cake flour and 3 g cornstarch, then mix until combined. Set aside.","2","Roll Cake"],
+   ["Add 45 g sugar to 3 egg whites in 3 additions, whipping until you achieve soft peaks.","2","Roll Cake"],
+   ["Add half of the meringue to the egg yolk mixture and gently mix. Then add the remaining meringue and fold until evenly combined.","2","Roll Cake"],
+   ["Gently mix without deflating the meringue. Pour the batter into an oven pan and spread it evenly. Bake in a 180°C (356°F) preheated oven for about 15 minutes. Remove from the oven and let cool.","2","Roll Cake"],
+   ["Roll Cake Assembly","heading",""],
+   ["Cut the roll cake into 4 long strips, each approximately 4.5 cm wide. (For the final strip, cut the end diagonally.)","2","Roll Cake Assembly"],
+   ["Add 13 g sugar to 130 g whipping cream and whip until firm.","2","Roll Cake Assembly"],
+   ["Spread a thin layer of the blueberry purée over the roll cake sheet, then spread the whipped cream over it.","2","Roll Cake Assembly"],
+   ["Roll up one strip of the roll cake and stand it upright on a plate. Then continue wrapping the remaining strips around it to form the roll cake.","2","Roll Cake Assembly"],
+   ["Tidy up any cream that protrudes from the top. Wrap the cake with a mousse cake ring/strip and refrigerate.","2","Roll Cake Assembly"],
+   ["Cheesecake","heading",""],
+   ["Add 6 g gelatin to 30 g water and let it bloom for about 10 minutes.","2","Cheesecake"],
+   ["Soften 200 g cream cheese at room temperature until smooth. Add 20 g sugar and 40 g plain yogurt, then mix well.","2","Cheesecake"],
+   ["Add 50 g blueberry purée and 5 g lemon juice, then mix well.","2","Cheesecake"],
+   ["Heat the bloomed gelatin in the microwave for about 15 seconds, until melted. Add it to the cheesecake mixture and mix well.","2","Cheesecake"],
+   ["Whip 120 g whipping cream to approximately 50% whipped consistency, then fold it into the cheesecake mixture.","2","Cheesecake"],
+   ["Pour the cheesecake batter over the roll cake and spread it evenly. Refrigerate for about 10 minutes.","2","Cheesecake"],
+   ["Blueberry Topping","heading",""],
+   ["Add 5 g gelatin to 25 g water and let it bloom for about 10 minutes.","2","Blueberry Topping"],
+   ["Add 20 g water to 150 g blueberry purée and mix well.","2","Blueberry Topping"],
+   ["Heat the bloomed gelatin in the microwave for about 15 seconds, until melted. Add it to the blueberry purée mixture and mix well.","2","Blueberry Topping"],
+   ["Pour the blueberry mixture over the chilled cheesecake layer and spread it evenly. Refrigerate for about 1 hour, until set.","2","Blueberry Topping"],
+   ["Decorate the cake with mint leaves and fresh blueberries.","2","Blueberry Topping"]
   ],
   plan:[
-   ["Thu","Anytime","Make blueberry puree → cool → refrigerate","Thursday"],
-   ["Fri","Anytime","Complete the entire cake","Friday"],
-   ["Sat","4:15 PM","Take out, unmold/finish/slice, and put dessert out","Saturday"]
+   ["Thu","Thursday","Make blueberry purée → cool completely → refrigerate. Do not assemble the cake yet.","Thursday"],
+   ["Fri","Friday morning","Bake the roll cake and let the sponge cool completely.","Friday"],
+   ["Fri","Friday afternoon / evening","Whip the cream and roll up the sponge cake, then make the cheesecake layer and blueberry topping. Refrigerate the completed cake overnight.","Friday"],
+   ["Sat","Saturday morning","Decorate the cake with mint leaves and fresh blueberries and finish the presentation. Keep refrigerated until serving.","Saturday"]
   ],
   note:"Original recipe is intentionally not scaled in this event. It makes 8 servings."
  }
@@ -443,49 +473,54 @@ const recipes = {
 
 const groceryGroups = [
  ["Produce",[
-  ["tomatoes","Tomatoes","3","Ratatouille × 3"],
-  ["eggplant","Eggplant","1.5 (buy 2)","Ratatouille × 1.5"],
-  ["zucchini","Zucchini","1.5 (buy 2)","Ratatouille × 1.5"],
-  ["onion","White onion","¾ (buy 1)","Ratatouille × ¾"],
-  ["bell","Bell pepper","¾ (buy 1)","Ratatouille × ¾"],
-  ["garlic","Garlic","4 cloves + 4.5–6 pieces","Chicken + Ratatouille"],
-  ["rosemary","Fresh rosemary","2 tsp","Chicken × 2 tsp"],
-  ["blueberries","Blueberries","280 g","Cheesecake × 280 g"],
-  ["lemon","Lemon juice","15 g","Cheesecake × 10 g + 5 g"]
+  ["tomatoes","Tomatoes","2","Ratatouille × 1"],
+  ["eggplant","Eggplant","1","Ratatouille × 1"],
+  ["zucchini","Zucchini","1","Ratatouille × 1"],
+  ["onion","White onion","½ (buy 1)","Ratatouille × ½"],
+  ["bell","Red pepper","½ (buy 1)","Ratatouille × ½"],
+  ["garlic","Garlic","3–4 cloves","Ratatouille"],
+  ["rosemary","Fresh rosemary","2.75 tsp","Chicken × 2.75 tsp"],
+  ["thyme","Fresh thyme","2 g","Ratatouille × 2 g"],
+  ["blueberries","Blueberries","280 g","Blueberry Roll Cake Cheesecake × 280 g purée"],
+  ["blueberries-garnish","Fresh blueberries","As needed","Blueberry Roll Cake Cheesecake — cake decoration"],
+  ["lemon","Lemon juice","15 g","Cheesecake × 10 g + 5 g"],
+  ["mint","Mint leaves","As needed","Blueberry Roll Cake Cheesecake — cake decoration"]
  ]],
  ["Protein",[
-  ["beef","Beef short ribs","1.8 kg (buy ~2 kg)","Maple Beef × 1.8 kg"],
-  ["chicken","Chicken thighs","8 (buy 8–10)","Chicken × 8"]
+  ["beef-finger","Beef finger meat","1.0 kg","Maple Beef × 1.0 kg"],
+  ["beef-lean","Leaner stew beef","500 g","Maple Beef × 500 g"],
+  ["chicken","Chicken thighs","11 boneless, skin-on","Chicken × 11"]
  ]],
  ["Dairy & chilled",[
   ["cream-cheese","Cream cheese","200 g","Cheesecake × 200 g"],
   ["whipping","Whipping cream","250 g","Cheesecake × 130 g + 120 g"],
   ["yogurt","Plain yogurt","40 g","Cheesecake × 40 g"],
   ["milk","Milk","45 g","Cheesecake × 45 g"],
-  ["eggs","Eggs","3","Cheesecake × 3 yolks + 3 whites"]
+  ["eggs","Eggs","3","Cheesecake × 3 yolks + 3 whites"],
+  ["butter","Butter","~1.5 tbsp","Chicken glaze"]
  ]],
  ["Pantry & baking",[
-  ["maple","Maple syrup","10.5–12 tbsp","Maple Beef × 10.5–12 tbsp"],
-  ["balsamic","Balsamic vinegar","9 tbsp","Maple Beef × 9 tbsp"],
-  ["cider","Apple cider","2 cups / ~475 mL","Chicken × 2 cups"],
-  ["dijon","Dijon mustard","2 tbsp","Chicken × 2 tbsp"],
-  ["olive-oil","Olive oil","at least 2 tbsp + ratatouille","Chicken + Ratatouille"],
-  ["canned","Canned tomatoes","450 g","Ratatouille × 450 g"],
-  ["basil","Dried basil","3 g","Ratatouille × 3 g"],
+  ["maple","Maple syrup","8.75–10 tbsp","Maple Beef × 8.75–10 tbsp"],
+  ["balsamic","Balsamic vinegar","7.5 tbsp","Maple Beef × 7.5 tbsp"],
+  ["cider","Apple cider","2.75 cups","Chicken × 2.75 cups"],
+  ["dijon","Dijon mustard","2.75 tbsp","Chicken × 2.75 tbsp"],
+  ["olive-oil","Olive oil","at least 2.75 tbsp + ratatouille","Chicken + Ratatouille"],
+  ["canned","Canned tomatoes","300 g","Ratatouille × 300 g"],
   ["sugar","Sugar","163 g","Cheesecake total"],
   ["flour","Cake flour","45 g","Cheesecake × 45 g"],
   ["cornstarch","Cornstarch","3 g","Cheesecake × 3 g"],
   ["gelatin","Gelatin powder","11 g","Cheesecake × 6 g + 5 g"],
   ["vanilla","Vanilla extract","3 g","Cheesecake × 3 g"],
   ["vegetable-oil","Vegetable oil","23 g","Cheesecake × 23 g"],
-  ["salt","Salt","As needed + 1.5 tsp beef","Beef + Chicken + Ratatouille"],
-  ["black-pepper","Black pepper","As needed + 1.5 tsp beef","Beef + Chicken + Ratatouille"],
+  ["salt","Sea salt","As needed + 1.25 tsp beef","Beef + Chicken + Ratatouille"],
+  ["black-pepper","Black pepper","As needed + 1.25 tsp beef","Beef + Chicken + Ratatouille"],
+  ["water","Water","As needed","Beef + Cheesecake"]
  ]]
 ];
 
 const baseState = {
  page:"home", recipe:null, recipeTab:"ingredients",
- checks:{}, purchased:{}, have:{}, serving:{beef:10.5,chicken:8,ratatouille:10.5,cheesecake:8},
+ checks:{}, purchased:{}, have:{}, serving:{beef:9,chicken:11,ratatouille:6,cheesecake:8},
  customIngredients:[], customCategories:[], cookTimeline:null, customRecipes:[], menuItems:null, event:{name:"Birthday Dinner",date:"Saturday, September 12",start:"5:00 PM",end:"11:00 PM",confirmed:["Ted","Judy","Charlene","Shannon","Elvin","Kaylee","Daniel","Roy","Ryan"],maybe:["Alex","Morgan"]}
 };
 // Storage is wrapped because some embedded previews (including sandboxed
@@ -504,6 +539,7 @@ let savedState = {};
 try { savedState = JSON.parse(storage.get("tableState") || "{}") || {}; } catch (_) { savedState = {}; }
 
 let state = {...baseState, ...savedState};
+if (savedState.serving && savedState.serving.beef===11) savedState.serving.beef=9;
 state.checks=state.checks||{}; state.purchased=state.purchased||{}; state.have=state.have||{}; state.customIngredients=state.customIngredients||[]; state.customCategories=state.customCategories||[]; state.cookTimeline=state.cookTimeline||null; state.menuItems=state.menuItems||null; state.serving={...baseState.serving,...(state.serving||{})}; state.event={...baseState.event,...(state.event||{}),confirmed:[...(state.event?.confirmed||baseState.event.confirmed)],maybe:[...(state.event?.maybe||baseState.event.maybe)]};
 
 function save(){storage.set("tableState",JSON.stringify(state))}
@@ -678,11 +714,11 @@ function grocery(){
 function sourceLines(id){
  const custom=state.customIngredients.find(x=>x.id===id); if(custom) return `<div>Custom ingredient</div>`;
  const map={
-  tomatoes:["Ratatouille: 3"],eggplant:["Ratatouille: 1.5 (buy 2)"],zucchini:["Ratatouille: 1.5 (buy 2)"],onion:["Ratatouille: ¾"],bell:["Ratatouille: ¾"],
-  garlic:["Apple Cider Chicken Thighs: 4 cloves","Ratatouille: 4.5–6 pieces"],rosemary:["Apple Cider Chicken Thighs: 2 tsp"],blueberries:["Blueberry Roll Cake Cheesecake: 280 g"],lemon:["Blueberry Roll Cake Cheesecake: 10 g + 5 g"],
-  beef:["Maple Syrup Braised Beef: 1.8 kg"],chicken:["Apple Cider Chicken Thighs: 8"],"cream-cheese":["Blueberry Roll Cake Cheesecake: 200 g"],whipping:["Blueberry Roll Cake Cheesecake: 130 g","Blueberry Roll Cake Cheesecake: 120 g"],yogurt:["Blueberry Roll Cake Cheesecake: 40 g"],milk:["Blueberry Roll Cake Cheesecake: 45 g"],eggs:["Blueberry Roll Cake Cheesecake: 3 yolks + 3 whites"],
-  maple:["Maple Syrup Braised Beef: 10.5–12 tbsp"],balsamic:["Maple Syrup Braised Beef: 9 tbsp"],cider:["Apple Cider Chicken Thighs: 2 cups"],dijon:["Apple Cider Chicken Thighs: 2 tbsp"],"olive-oil":["Apple Cider Chicken Thighs: 2 tbsp","Ratatouille: as needed"],canned:["Ratatouille: 450 g"],basil:["Ratatouille: 3 g"],
-  sugar:["Blueberry Roll Cake Cheesecake: 163 g total"],flour:["Blueberry Roll Cake Cheesecake: 45 g"],cornstarch:["Blueberry Roll Cake Cheesecake: 3 g"],gelatin:["Blueberry Roll Cake Cheesecake: 6 g + 5 g"],vanilla:["Blueberry Roll Cake Cheesecake: 3 g"],"vegetable-oil":["Blueberry Roll Cake Cheesecake: 23 g"],salt:["Maple Syrup Braised Beef: 1.5 tsp","Apple Cider Chicken Thighs: as needed","Ratatouille: as needed"],"black-pepper":["Maple Syrup Braised Beef: 1.5 tsp","Apple Cider Chicken Thighs: as needed","Ratatouille: as needed"]
+  tomatoes:["Ratatouille: 2"],eggplant:["Ratatouille: 1"],zucchini:["Ratatouille: 1"],onion:["Ratatouille: ½"],bell:["Ratatouille: ½"],
+  garlic:["Ratatouille: 3–4 cloves"],rosemary:["Apple Cider Glazed Chicken Thighs: 2.75 tsp"],thyme:["Ratatouille: 2 g"],blueberries:["Blueberry Roll Cake Cheesecake: 280 g purée"],"blueberries-garnish":["Blueberry Roll Cake Cheesecake: cake decoration"],lemon:["Blueberry Roll Cake Cheesecake: 15 g total"],mint:["Blueberry Roll Cake Cheesecake: cake decoration"],
+  beef:["Maple Syrup Braised Beef: 1.5 kg"],chicken:["Apple Cider Glazed Chicken Thighs: 11"],"cream-cheese":["Blueberry Roll Cake Cheesecake: 200 g"],whipping:["Blueberry Roll Cake Cheesecake: 250 g total"],yogurt:["Blueberry Roll Cake Cheesecake: 40 g"],milk:["Blueberry Roll Cake Cheesecake: 45 g"],eggs:["Blueberry Roll Cake Cheesecake: 3 yolks + 3 whites"],
+  maple:["Maple Syrup Braised Beef: 8.75–10 tbsp"],balsamic:["Maple Syrup Braised Beef: 7.5 tbsp"],cider:["Apple Cider Glazed Chicken Thighs: 2.75 cups"],dijon:["Apple Cider Glazed Chicken Thighs: 2.75 tbsp"],"olive-oil":["Apple Cider Glazed Chicken Thighs: 2.75 tbsp + Ratatouille: as needed"],canned:["Ratatouille: 300 g"],
+  sugar:["Blueberry Roll Cake Cheesecake: 163 g total"],flour:["Blueberry Roll Cake Cheesecake: 45 g"],cornstarch:["Blueberry Roll Cake Cheesecake: 3 g"],gelatin:["Blueberry Roll Cake Cheesecake: 11 g total"],vanilla:["Blueberry Roll Cake Cheesecake: 3 g"],"vegetable-oil":["Blueberry Roll Cake Cheesecake: 23 g"],salt:["Maple Syrup Braised Beef: 1.25 tsp + Chicken: as needed + Ratatouille: as needed"],"black-pepper":["Maple Syrup Braised Beef: 1.25 tsp + Chicken: as needed + Ratatouille: as needed"],water:["Beef: as needed + Cheesecake: 75 g total"]
  };
  return (map[id]||[]).map(x=>`<div>${esc(x)}</div>`).join("");
 }
@@ -717,11 +753,11 @@ const defaultPlan=[
  {day:"Wednesday · Sep 9",label:"Grocery + setup",items:[
   {time:"",text:"Grocery shopping",recipe:"General",id:"personal:0"},{time:"",text:"Check ingredients",recipe:"General",id:"personal:1"},{time:"",text:"Organize fridge",recipe:"General",id:"personal:2"},{time:"",text:"Prepare / confirm cookware and serving dishes",recipe:"General",id:"personal:3"}]},
  {day:"Thursday · Sep 10",label:"Make-ahead prep",items:[
-  {time:"",text:"Make blueberry puree → cool → refrigerate",recipe:"Blueberry Roll Cake Cheesecake",id:"step:cheesecake:0",rid:"cheesecake"},{time:"",text:"Make ratatouille tomato sauce → cool → refrigerate",recipe:"Ratatouille",id:"step:ratatouille:0",rid:"ratatouille"},{time:"",text:"Trim chicken, prep garlic & rosemary, mix glaze, season chicken",recipe:"Apple Cider Glazed Chicken Thighs",id:"step:chicken:0",rid:"chicken"}]},
- {day:"Friday · Sep 11",label:"Cook + assemble ahead",items:[
-  {time:"",text:"Complete Blueberry Roll Cake Cheesecake → refrigerate",recipe:"Blueberry Roll Cake Cheesecake",id:"step:cheesecake:1",rid:"cheesecake"},{time:"",text:"Cook Maple Syrup Braised Beef → cool → refrigerate",recipe:"Maple Syrup Braised Beef",id:"step:beef:0",rid:"beef"},{time:"",text:"Organize serving dishes and kitchen",recipe:"General",id:"personal:5"},{time:"",text:"Set up anything that can be done ahead",recipe:"General",id:"personal:6"}]},
+  {time:"",text:"Make blueberry purée → cool completely → refrigerate",recipe:"Blueberry Roll Cake Cheesecake",id:"step:cheesecake:3",rid:"cheesecake"},{time:"",text:"Make ratatouille tomato sauce → cool → refrigerate",recipe:"Ratatouille",id:"step:ratatouille:0",rid:"ratatouille"},{time:"",text:"Trim chicken, prep garlic & rosemary, mix glaze, season chicken",recipe:"Apple Cider Glazed Chicken Thighs",id:"step:chicken:0",rid:"chicken"}]},
+ {day:"Friday · Sep 11",label:"Bake + assemble cake",items:[
+  {time:"Morning",text:"Bake the blueberry roll cake and let the sponge cool completely",recipe:"Blueberry Roll Cake Cheesecake",id:"step:cheesecake:12",rid:"cheesecake"},{time:"Afternoon / evening",text:"Whip the cream and roll up the sponge cake",recipe:"Blueberry Roll Cake Cheesecake",id:"step:cheesecake:15",rid:"cheesecake"},{time:"Afternoon / evening",text:"Make the cheesecake layer and blueberry topping, then refrigerate the completed cake overnight",recipe:"Blueberry Roll Cake Cheesecake",id:"step:cheesecake:20",rid:"cheesecake"},{time:"",text:"Cook Maple Syrup Braised Beef → cool → refrigerate",recipe:"Maple Syrup Braised Beef",id:"step:beef:0",rid:"beef"},{time:"",text:"Organize serving dishes and kitchen",recipe:"General",id:"personal:5"},{time:"",text:"Set up anything that can be done ahead",recipe:"General",id:"personal:6"}]},
  {day:"Saturday · Sep 12",label:"Birthday",items:[
-  {time:"1:30 PM",text:"Start slowly reheating Maple Beef",recipe:"Maple Syrup Braised Beef",id:"step:beef:7",rid:"beef"},{time:"2:00 PM",text:"Slice vegetables + assemble ratatouille",recipe:"Ratatouille",id:"step:ratatouille:5",rid:"ratatouille"},{time:"2:15 PM",text:"Bake ratatouille: 150°C covered 30 min → 200°C uncovered 15 min",recipe:"Ratatouille",id:"step:ratatouille:9",rid:"ratatouille"},{time:"2:45 PM",text:"Start cooking chicken",recipe:"Apple Cider Glazed Chicken Thighs",id:"step:chicken:1",rid:"chicken"},{time:"3:15–3:45 PM",text:"Finish chicken, ratatouille, transfer dishes, keep warm",recipe:"Final cooking",id:""},{time:"3:45–4:15 PM",text:"Final buffet setup + cheesecake finish + table/lighting/music",recipe:"Hosting",id:"personal:8"},{time:"4:15 PM",text:"Cooking finished · 45 minutes until guests",recipe:"Hosting",id:""},{time:"5:00 PM",text:"Guests arrive 🎉",recipe:"Hosting",id:""}] }
+  {time:"Morning",text:"Decorate the blueberry roll cheesecake with mint leaves and finish the presentation",recipe:"Blueberry Roll Cake Cheesecake",id:"personal:9",rid:"cheesecake"},{time:"1:30 PM",text:"Start slowly reheating Maple Beef",recipe:"Maple Syrup Braised Beef",id:"step:beef:7",rid:"beef"},{time:"2:00 PM",text:"Slice vegetables + assemble ratatouille",recipe:"Ratatouille",id:"step:ratatouille:5",rid:"ratatouille"},{time:"2:15 PM",text:"Bake ratatouille: 150°C covered 30 min → 200°C uncovered 15 min",recipe:"Ratatouille",id:"step:ratatouille:9",rid:"ratatouille"},{time:"2:45 PM",text:"Start cooking chicken",recipe:"Apple Cider Glazed Chicken Thighs",id:"step:chicken:1",rid:"chicken"},{time:"3:15–3:45 PM",text:"Finish chicken, ratatouille, transfer dishes, keep warm",recipe:"Final cooking",id:""},{time:"3:45–4:15 PM",text:"Final buffet setup + table/lighting/music",recipe:"Hosting",id:"personal:8"},{time:"4:15 PM",text:"Cooking finished · 45 minutes until guests",recipe:"Hosting",id:""},{time:"5:00 PM",text:"Guests arrive 🎉",recipe:"Hosting",id:""}]}
 ];
 function getPlan(){return state.planData||defaultPlan}
 function recipeIdFromName(name){return Object.entries(recipes).find(([,r])=>r.name===name)?.[0]||null}
@@ -767,14 +803,18 @@ function cookEdit(){
 function updateCookItem(ii,key,value){const p=getCookTimeline().slice();p[ii][key]=value;state.cookTimeline=p;save()}
 function removeCookItem(ii){const p=getCookTimeline().slice();p.splice(ii,1);state.cookTimeline=p;save();render()}
 function addCookItem(){const p=getCookTimeline().slice();p.push({time:"",description:"New cooking task",recipeId:"",id:"cook:"+Date.now()});state.cookTimeline=p;save();render()}
+function servingsLabel(r, serving){
+ const target=r.servingLabel || `${r.defaultServings} servings`;
+ return serving===r.defaultServings ? target : `${serving} servings`;
+}
 function recipesPage(){
  const cats=['Appetizer','Main','Side','Dessert','Sauce','Drink'];const all=allRecipes();
- return `<div class="toolbar"><div></div></div>`+cats.map(cat=>{const items=Object.entries(all).filter(([id,r])=>r.category===cat);if(!items.length)return '';return `<div class="section"><div class="section-head"><h2>${cat}</h2></div><div class="recipe-list">${items.map(([id,r])=>`<div class="card recipe-card"><span class="icon">${r.icon||'🍽️'}</span><button class="recipe-card-body recipe-link" onclick="openRecipe('${id}')"><span class="recipe-card-title">${esc(r.name)}</span><span class="recipe-card-meta">${r.category} · ${r.defaultServings} servings · ${esc(r.cookTime||'—')}</span></button><span class="chev">›</span></div>`).join('')}</div></div>`}).join('');
+ return `<div class="toolbar"><div></div></div>`+cats.map(cat=>{const items=Object.entries(all).filter(([id,r])=>r.category===cat);if(!items.length)return '';return `<div class="section"><div class="section-head"><h2>${cat}</h2></div><div class="recipe-list">${items.map(([id,r])=>`<div class="card recipe-card"><span class="icon">${r.icon||'🍽️'}</span><button class="recipe-card-body recipe-link" onclick="openRecipe('${id}')"><span class="recipe-card-title">${esc(r.name)}</span><span class="recipe-card-meta">${r.category} · ${r.servingLabel||r.defaultServings+" servings"} · ${esc(r.cookTime||'—')}</span></button><span class="chev">›</span></div>`).join('')}</div></div>`}).join('');
 }
 function recipePage(id){
  const r=recipes[id]; r.id=id; const serving=state.serving[id];
  return `<button class="back" onclick="go('recipes')">← All recipes</button>
- <div class="recipe-head"><div class="eyebrow">${r.category}</div><h1>${esc(r.name)}</h1><div class="date">${r.category} · ${id==="cheesecake"?"8 servings":serving+" servings"} · ${esc(r.cookTime||'—')}</div><div class="recipe-actions"><a class="btn btn-secondary" href="${r.originalUrl}" target="_blank" rel="noopener">${esc(r.originalLabel||'View original recipe')} ↗</a><div class="scale"><button onclick="changeServing('${id}',-1)">−</button><span class="scale-value">${id==="cheesecake"?"Original":serving+" servings"}</span><button onclick="changeServing('${id}',1)" ${id==="cheesecake"?'disabled':''}>+</button></div><button class="btn btn-secondary" onclick="resetRecipe('${id}')">Reset recipe</button></div></div>
+ <div class="recipe-head"><div class="eyebrow">${r.category}</div><h1>${esc(r.name)}</h1><div class="date">${r.category} · ${id==="cheesecake"?"8 servings":servingsLabel(r,serving)} · ${esc(r.cookTime||'—')}</div><div class="recipe-actions"><a class="btn btn-secondary" href="${r.originalUrl}" target="_blank" rel="noopener">${esc(r.originalLabel||'View original recipe')} ↗</a><div class="scale"><button onclick="changeServing('${id}',-1)">−</button><span class="scale-value">${id==="cheesecake"?"Original":servingsLabel(r,serving)}</span><button onclick="changeServing('${id}',1)" ${id==="cheesecake"?'disabled':''}>+</button></div><button class="btn btn-secondary" onclick="resetRecipe('${id}')">Reset recipe</button></div></div>
  <div class="tabs">${["ingredients","instructions","plan"].map(t=>`<button class="${state.recipeTab===t?'active':''}" onclick="recipeTab('${t}')">${t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div>
  ${state.recipeTab==="ingredients"?recipeIngredients(r,serving):state.recipeTab==="instructions"?recipeInstructions(r,serving):recipePlan(r)}
  `;
@@ -787,7 +827,12 @@ function recipeIngredients(r,serving){
  ${r.note?`<div class="section"><div class="note">${esc(r.note)}</div></div>`:""}`;
 }
 function recipeInstructions(r,serving){
- return `<div class="card">${r.steps.map((s,i)=>{const id=`step:${r.id}:${i}`,done=isChecked(id);return `<div class="instruction checkable-row" onclick="toggle('${id}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle('${id}')}"><div class="instruction-head"><div class="step-num">${i+1}</div><div class="instruction-text ${done?'done':''}">${esc(stepText(r,s[0]))}</div><button class="check ${done?'done':''}" onclick="event.stopPropagation()"></button></div></div>`}).join("")}</div>`;
+ let n=0;
+ return `<div class="card">${r.steps.map((s,i)=>{
+   if(s[1]==="heading") return `<div class="instruction-section-heading"><h3>${esc(s[0])}</h3></div>`;
+   const id=`step:${r.id}:${i}`,done=isChecked(id); n++;
+   return `<div class="instruction checkable-row" onclick="toggle('${id}')" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle('${id}')}" ><div class="instruction-head"><div class="step-num">${n}</div><div class="instruction-text ${done?'done':''}">${esc(stepText(r,s[0]))}</div><button class="check ${done?'done':''}" onclick="event.stopPropagation()"></button></div></div>`;
+ }).join("")}</div>`;
 }
 function recipePlan(r){
  return `<div class="card plan-block">${r.plan.map(p=>`<div class="plan-row"><div class="plan-date">${esc(p[0])}</div><div class="plan-main"><strong>${esc(p[1])}</strong><div>${esc(p[2])}</div></div></div>`).join("")}</div>`;
